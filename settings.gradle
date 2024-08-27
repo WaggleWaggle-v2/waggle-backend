@@ -1,0 +1,26 @@
+rootProject.name = 'waggle'
+
+/* ============= *
+ * [APPLICATION] *
+ * ============= */
+include('modules_application')
+
+/* ====== *
+ * [CORE] *
+ * ====== */
+include('modules_core')
+
+/* ======== *
+ * [DOMAIN] *
+ * ======== */
+include('modules_domain')
+
+/* ============= *
+ * [INDEPENDENT] *
+ * ============= */
+include('modules_independent')
+
+/* ======== *
+ * [SYSTEM] *
+ * ======== */
+include('modules_system')

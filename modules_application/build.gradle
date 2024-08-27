@@ -1,0 +1,12 @@
+plugins {
+    id 'java'
+}
+
+group = 'unius'
+
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+}
