@@ -4,6 +4,8 @@ rootProject.name = 'waggle'
  * [APPLICATION] *
  * ============= */
 include('modules_application')
+include('modules_application:application_gateway')
+include('modules_application:application_config')
 
 /* ====== *
  * [CORE] *
@@ -24,3 +26,4 @@ include('modules_independent')
  * [SYSTEM] *
  * ======== */
 include('modules_system')
+include('modules_system:system_jwt')
