@@ -1,0 +1,9 @@
+spring:
+  profiles:
+    active:
+      - jwt
+      - jpa-${BOOT_ENV}
+      - oauth
+  cloud:
+    config:
+      uri: ${CONFIG_URI}

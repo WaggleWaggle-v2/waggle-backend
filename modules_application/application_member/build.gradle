@@ -6,6 +6,9 @@ plugins {
 
 group = 'unius'
 
+bootJar.enabled = true
+jar.enabled = false
+
 java {
     sourceCompatibility = '17'
 }
@@ -13,9 +16,6 @@ java {
 repositories {
     mavenCentral()
 }
-
-bootJar.enabled = true
-jar.enabled = false
 
 dependencyManagement {
     imports {
@@ -25,15 +25,27 @@ dependencyManagement {
 
 dependencies {
     implementation 'org.springframework.boot:spring-boot-starter'
-    implementation 'org.springframework.cloud:spring-cloud-starter-gateway'
+    implementation 'org.springframework.boot:spring-boot-starter-web'
+    implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
     implementation 'org.springframework.cloud:spring-cloud-starter-config'
     implementation 'org.springframework.cloud:spring-cloud-starter-bootstrap'
-
-    implementation 'org.springdoc:springdoc-openapi-starter-webflux-ui:2.0.2'
-    implementation 'org.springframework.boot:spring-boot-starter-security:3.3.0'
 
     compileOnly 'org.projectlombok:lombok'
     annotationProcessor 'org.projectlombok:lombok'
 
-    implementation project(":modules_system:system_jwt")
+    runtimeOnly 'org.mariadb.jdbc:mariadb-java-client'
+
+    implementation project (":modules_core:core_domain")
+
+    implementation project (":modules_domain:domain_user")
+    implementation project (":modules_domain:domain_oauth")
+
+    implementation project (":modules_independent:independent_jpa")
+
+    implementation project (":modules_system:system_jwt")
+    implementation project (":modules_system:system_oauth")
 }
+
+//tasks.named('test') {
+//    useJUnitPlatform()
+//}

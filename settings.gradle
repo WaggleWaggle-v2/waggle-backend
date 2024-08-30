@@ -6,24 +6,30 @@ rootProject.name = 'waggle'
 include('modules_application')
 include('modules_application:application_gateway')
 include('modules_application:application_config')
+include('modules_application:application_member')
 
 /* ====== *
  * [CORE] *
  * ====== */
 include('modules_core')
+include('modules_core:core_domain')
 
 /* ======== *
  * [DOMAIN] *
  * ======== */
 include('modules_domain')
+include('modules_domain:domain_user')
+include('modules_domain:domain_oauth')
 
 /* ============= *
  * [INDEPENDENT] *
  * ============= */
 include('modules_independent')
+include('modules_independent:independent_jpa')
 
 /* ======== *
  * [SYSTEM] *
  * ======== */
 include('modules_system')
 include('modules_system:system_jwt')
+include('modules_system:system_oauth')

@@ -1,0 +1,8 @@
+spring:
+  profiles:
+    active:
+      - jwt
+      - gateway-${BOOT_ENV}
+  cloud:
+    config:
+      uri: ${CONFIG_URI}
