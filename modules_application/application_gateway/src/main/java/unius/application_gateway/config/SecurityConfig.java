@@ -25,6 +25,7 @@ public class SecurityConfig {
         CorsConfiguration config = new CorsConfiguration();
         config.addAllowedOrigin("http://localhost:9090");
         config.addAllowedOrigin("https://wagglewaggle.netlify.app/");
+        config.addAllowedOrigin("https://waggle-login-test.netlify.app/");
 
         config.addAllowedHeader("Authorization");
         config.addAllowedHeader("Content-Type");
