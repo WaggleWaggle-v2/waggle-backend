@@ -1,10 +1,5 @@
-package unius.domain_user.type;
+package unius.core_user.type;
 
-import lombok.Getter;
-import lombok.RequiredArgsConstructor;
-
-@Getter
-@RequiredArgsConstructor
 public enum UserState {
     INCOMPLETE("INCOMPLETE"),
     VERIFIED("VERIFIED"),
@@ -13,4 +8,12 @@ public enum UserState {
     ADMIN("ADMIN");
 
     private final String description;
+
+    UserState(String description) {
+        this.description = description;
+    }
+
+    public String getDescription() {
+        return this.description;
+    }
 }

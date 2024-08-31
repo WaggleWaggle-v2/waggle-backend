@@ -2,41 +2,43 @@ package unius.domain_oauth.service;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
-import unius.core_domain.dto.DomainDto;
-import unius.core_domain.service.DomainService;
 import unius.domain_oauth.domain.OAuthInfo;
-import unius.domain_oauth.dto.CreateOAuthDto;
 import unius.domain_oauth.repository.OAuthInfoRepository;
+import unius.domain_oauth.repository.OAuthInfoRepositoryQuerydsl;
+import unius.domain_oauth.type.PlatformType;
+import unius.domain_user.domain.User;
+import unius.domain_user.service.UserService;
 
 @Service
 @RequiredArgsConstructor
-public class OAuthInfoService implements DomainService<Long> {
+public class OAuthInfoService {
 
     private final OAuthInfoRepository oAuthInfoRepository;
+    private final OAuthInfoRepositoryQuerydsl oAuthInfoRepositoryQuerydsl;
 
-    @Override
-    public <Request extends DomainDto, Response extends DomainDto> Response create(Request request) {
-        if (request instanceof CreateOAuthDto.Request) {
-            OAuthInfo oAuthInfo = OAuthInfo.builder()
-                    .user(((CreateOAuthDto.Request) request).getUser())
-                    .platform(((CreateOAuthDto.Request) request).getPlatform())
+    private final UserService userService;
+
+    public User create(String oAuthId, PlatformType platform) {
+        OAuthInfo oAuthInfo = oAuthInfoRepositoryQuerydsl.getOAuthInfo(oAuthId, platform);
+        User user;
+
+        if(oAuthInfo == null) {
+            user = userService.create();
+            oAuthInfo = OAuthInfo.builder()
+                    .oauthId(oAuthId)
+                    .platform(platform)
+                    .user(user)
                     .build();
 
             oAuthInfoRepository.save(oAuthInfo);
-
-            return null;
+        } else {
+            user = this.getUser(oAuthId, platform);
         }
 
-        throw new IllegalArgumentException();
+        return user;
     }
 
-    @Override
-    public <Response extends DomainDto> Response get(Long aLong) {
-        return null;
-    }
-
-    @Override
-    public void delete(Long aLong) {
-
+    public User getUser(String oAuthId, PlatformType platform) {
+        return oAuthInfoRepositoryQuerydsl.getUser(oAuthId, platform);
     }
 }

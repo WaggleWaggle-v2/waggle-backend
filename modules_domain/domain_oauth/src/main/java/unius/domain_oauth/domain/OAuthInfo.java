@@ -21,6 +21,9 @@ public class OAuthInfo extends AuditingModel {
     @Id
     private Long id;
 
+    @Column(nullable = false)
+    private String oauthId;
+
     @Enumerated(EnumType.STRING)
     private PlatformType platform;
 

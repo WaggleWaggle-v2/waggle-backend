@@ -1,6 +1,7 @@
 package unius.application_member.controller;
 
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -13,11 +14,18 @@ import unius.application_member.service.AuthService;
 @RequiredArgsConstructor
 public class AuthController {
 
+    private static final String GRANT_TYPE = "Bearer ";
+
     private final AuthService authService;
 
     @GetMapping("/login/google")
-    public ResponseEntity<String> googleLogin(
+    public ResponseEntity<Void> googleLogin(
             @RequestParam("code") String code) {
-        return ResponseEntity.ok(authService.googleLogin(code));
+        HttpHeaders headers = new HttpHeaders();
+        headers.add(HttpHeaders.AUTHORIZATION, GRANT_TYPE + authService.googleLogin(code));
+
+        return ResponseEntity.ok()
+                .headers(headers)
+                .build();
     }
 }

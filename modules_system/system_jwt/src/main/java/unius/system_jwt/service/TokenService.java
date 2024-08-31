@@ -1,8 +1,8 @@
 package unius.system_jwt.service;
 
 import org.springframework.util.StringUtils;
+import unius.core_user.type.UserState;
 import unius.system_jwt.dto.GenerateTokenDto.Response;
-import unius.system_jwt.dto.GenerateTokenDto.Request;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
@@ -24,9 +24,9 @@ public class TokenService {
     @Value("${spring.jwt.secret}")
     private String jwtPrivateKey;
 
-    public Response generateToken(Request request) {
-        Claims claims = Jwts.claims().setSubject(String.valueOf(request.getId()));
-        claims.put(KEY_STATE.getDescription(), request.getUserState());
+    public Response generateToken(Long id, UserState userState) {
+        Claims claims = Jwts.claims().setSubject(String.valueOf(id));
+        claims.put(KEY_STATE.getDescription(), userState.getDescription());
 
         Date now = new Date();
 

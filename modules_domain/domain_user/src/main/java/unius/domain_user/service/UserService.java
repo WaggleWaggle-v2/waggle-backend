@@ -1,41 +1,31 @@
 package unius.domain_user.service;
 
+import jakarta.persistence.EntityManager;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
-import unius.core_domain.dto.DomainDto;
-import unius.core_domain.service.DomainService;
 import unius.domain_user.domain.User;
-import unius.domain_user.dto.CreateUserDto;
 import unius.domain_user.repository.UserRepository;
+
+import static unius.core_user.type.UserState.INCOMPLETE;
 
 @Service
 @RequiredArgsConstructor
-public class UserService implements DomainService<Long> {
+public class UserService {
 
+    private final EntityManager entityManager;
     private final UserRepository userRepository;
 
-    @Override
-    public <Request extends DomainDto, Response extends DomainDto> Response create(Request request) {
-        if(request instanceof CreateUserDto.Request) {
-            User user = User.builder()
-                    .userState(((CreateUserDto.Request) request).getUserState())
-                    .build();
+    public User create() {
+        User user = User.builder()
+                .userState(INCOMPLETE)
+                .build();
 
-            userRepository.save(user);
+        userRepository.save(user);
+        entityManager.flush();
 
-            return null;
-        }
-
-        throw new IllegalArgumentException();
+        return user;
     }
 
-    @Override
-    public <Response extends DomainDto> Response get(Long aLong) {
-        return null;
-    }
+//    public User get(String oAuthUserId)
 
-    @Override
-    public void delete(Long aLong) {
-
-    }
 }

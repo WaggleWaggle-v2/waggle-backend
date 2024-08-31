@@ -6,7 +6,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.experimental.SuperBuilder;
-import unius.domain_user.type.UserState;
+import unius.core_user.type.UserState;
 import unius.independent_jpa.model.AuditingModel;
 
 @Getter

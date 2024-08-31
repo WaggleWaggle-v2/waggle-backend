@@ -12,7 +12,7 @@ include('modules_application:application_member')
  * [CORE] *
  * ====== */
 include('modules_core')
-include('modules_core:core_domain')
+include('modules_core:core_user')
 
 /* ======== *
  * [DOMAIN] *
