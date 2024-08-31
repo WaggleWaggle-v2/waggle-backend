@@ -22,7 +22,7 @@ public class JwtFilter extends AbstractGatewayFilterFactory<JwtFilter.Config> {
     @Override
     public GatewayFilter apply(Config config) {
         return ((exchange, chain) -> {
-            if(exchange.getRequest().getHeaders().toString().startsWith("/unius/member/login")) {
+            if(exchange.getRequest().getPath().toString().startsWith("/unius/member/login")) {
                 return chain.filter(exchange);
             }
 
