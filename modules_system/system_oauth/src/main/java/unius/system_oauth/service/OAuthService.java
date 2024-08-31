@@ -26,13 +26,8 @@ public class OAuthService {
     private String GOOGLE_REDIRECT_URI;
 
     public String getGoogleAuthCode(String code) {
-        System.out.println(GOOGLE_CLIENT_ID);
-        System.out.println(GOOGLE_CLIENT_SECRET);
-        System.out.println(GOOGLE_REDIRECT_URI);
-
-
         ResponseEntity<Map> googleToken = getGoogleToken(code);
-        if(!ObjectUtils.isEmpty(googleToken.getBody())) {
+        if(ObjectUtils.isEmpty(googleToken.getBody())) {
             throw new RuntimeException();
         }
 
