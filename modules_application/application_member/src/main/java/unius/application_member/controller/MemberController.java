@@ -3,10 +3,7 @@ package unius.application_member.controller;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestHeader;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.*;
 import unius.application_member.dto.GetMyUserInfoDto;
 import unius.application_member.service.MemberService;
 
@@ -22,4 +19,11 @@ public class MemberController {
             @RequestHeader("X-User-Id-Header") String id) {
         return ResponseEntity.ok(memberService.getMyUserInfo(Long.parseLong(id)));
     }
+
+//    @PostMapping("/initialize")
+//    public ResponseEntity<?> initializeUserInfo(
+//            @RequestHeader("X-User-Id-Header") String id,
+//            @ResponseBody ) {
+//
+//    }
 }

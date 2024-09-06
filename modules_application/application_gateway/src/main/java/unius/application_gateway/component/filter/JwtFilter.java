@@ -28,7 +28,7 @@ public class JwtFilter extends AbstractGatewayFilterFactory<JwtFilter.Config> {
 
             String token = exchange.getRequest().getHeaders().getFirst("Authorization");
 
-            if(!tokenService.validateToken(token)){
+            if(tokenService.validateToken(token)){
                 exchange.getResponse().setStatusCode(HttpStatus.UNAUTHORIZED);
                 return exchange.getResponse().setComplete();
             }

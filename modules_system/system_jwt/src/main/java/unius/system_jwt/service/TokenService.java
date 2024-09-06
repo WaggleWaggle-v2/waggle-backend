@@ -50,10 +50,15 @@ public class TokenService {
     public boolean validateToken(String token) {
         if(!StringUtils.hasText(token)) return false;
 
-        token = TokenUtils.removeTokenHeader(token);
-        Claims claims = TokenUtils.parseToken(token);
+        System.out.println(token);
 
-        if(claims.get(KEY_STATE.getDescription()) != "VERIFIED") return false;
+        token = TokenUtils.removeTokenHeader(token);
+        Claims claims = TokenUtils.parseToken(token, jwtPrivateKey);
+
+        System.out.println(claims.get(KEY_STATE.getDescription()));
+
+        if(claims.get(KEY_STATE.getDescription()) != "VERIFIED" &&
+           claims.get(KEY_STATE.getDescription()) != "INCOMPLETE") return false;
 
         return claims.getExpiration().after(new Date());
     }
@@ -62,7 +67,7 @@ public class TokenService {
         if(!StringUtils.hasText(token)) return null;
         token = TokenUtils.removeTokenHeader(token);
 
-        Claims claims = TokenUtils.parseToken(token);
+        Claims claims = TokenUtils.parseToken(token, jwtPrivateKey);
 
         return claims.getSubject();
     }

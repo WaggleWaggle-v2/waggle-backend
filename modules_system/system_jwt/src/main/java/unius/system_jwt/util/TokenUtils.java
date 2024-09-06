@@ -4,20 +4,17 @@ import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.ExpiredJwtException;
 import io.jsonwebtoken.Jwts;
 import lombok.experimental.UtilityClass;
-import org.springframework.beans.factory.annotation.Value;
 
 @UtilityClass
 public class TokenUtils {
-    @Value("${spring.jwt.secret}")
-    private String jwtPrivateKey;
 
     public static String removeTokenHeader(String token) {
         return token.replace("Bearer ", "");
     }
 
-    public static Claims parseToken(String token) {
+    public static Claims parseToken(String token, String secretKey) {
         try {
-            return Jwts.parser().setSigningKey(jwtPrivateKey).parseClaimsJws(token).getBody();
+            return Jwts.parser().setSigningKey(secretKey).parseClaimsJws(token).getBody();
         } catch(ExpiredJwtException e) {
             return e.getClaims();
         }
