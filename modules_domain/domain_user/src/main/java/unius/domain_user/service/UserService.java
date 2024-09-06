@@ -5,6 +5,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import unius.domain_user.domain.User;
 import unius.domain_user.repository.UserRepository;
+import unius.domain_user.repository.UserRepositoryQuerydsl;
 
 import static unius.core_user.type.UserState.INCOMPLETE;
 
@@ -14,6 +15,7 @@ public class UserService {
 
     private final EntityManager entityManager;
     private final UserRepository userRepository;
+    private final UserRepositoryQuerydsl userRepositoryQuerydsl;
 
     public User create() {
         User user = User.builder()
@@ -26,6 +28,8 @@ public class UserService {
         return user;
     }
 
-//    public User get(String oAuthUserId)
+    public User get(Long userId) {
+        return userRepositoryQuerydsl.getUserInfo(userId);
+    }
 
 }
