@@ -10,6 +10,6 @@ import unius.domain_user.domain.User;
 public interface GetMyUserInfoMapper {
     GetMyUserInfoMapper INSTANCE = Mappers.getMapper(GetMyUserInfoMapper.class);
 
-    @Mapping(target = "userState", expression = "java(user.getUserState() != null ? user.getUserState().getDescription() : null)")
+    @Mapping(target = "userState", expression = "java(user.getUserState().getDescription())")
     GetMyUserInfoDto.Response toDto(User user);
 }
