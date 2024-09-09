@@ -9,6 +9,7 @@ import unius.domain_bookshelf.type.BookshelfState;
 
 import static com.querydsl.core.types.dsl.Expressions.FALSE;
 import static unius.domain_bookshelf.domain.QBookshelf.bookshelf;
+import static unius.domain_bookshelf.type.BookshelfState.ACTIVE;
 
 @Repository
 @RequiredArgsConstructor
@@ -34,5 +35,15 @@ public class BookshelfRepositoryQuerydsl {
                 .selectFrom(bookshelf)
                 .where(condition)
                 .fetchOne();
+    }
+
+    public void setNickname(Bookshelf currentBookshelf, String nickname) {
+        BooleanExpression condition = bookshelf.eq(currentBookshelf)
+                .and(bookshelf.bookshelfState.eq(ACTIVE));
+
+        jpaQueryFactory.update(bookshelf)
+                .set(bookshelf.nickname, nickname)
+                .where(condition)
+                .execute();
     }
 }

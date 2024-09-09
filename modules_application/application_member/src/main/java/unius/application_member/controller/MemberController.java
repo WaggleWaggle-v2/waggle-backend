@@ -6,6 +6,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 import unius.application_member.dto.GetMyUserInfoDto;
 import unius.application_member.dto.InitializeUserInfoDto;
+import unius.application_member.dto.SetUserNicknameDto;
 import unius.application_member.service.MemberService;
 
 @Controller
@@ -26,5 +27,12 @@ public class MemberController {
             @RequestHeader("X-User-Id-Header") String id,
             @RequestBody InitializeUserInfoDto.Request request) {
         return ResponseEntity.ok(memberService.initializeUserInfo(Long.parseLong(id), request));
+    }
+
+    @PatchMapping("/info/set/nickname")
+    public ResponseEntity<SetUserNicknameDto.Response> setUserNickname(
+            @RequestHeader("X-User-Id-Header") String id,
+            @RequestBody SetUserNicknameDto.Request request) {
+        return ResponseEntity.ok(memberService.setUserNickname(Long.parseLong(id), request));
     }
 }

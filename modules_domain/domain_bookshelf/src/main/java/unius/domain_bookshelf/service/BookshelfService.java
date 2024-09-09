@@ -40,4 +40,10 @@ public class BookshelfService {
     public Bookshelf get(Long bookshelfId, BookshelfState... bookshelfStates) {
         return bookshelfRepositoryQuerydsl.getBookshelf(bookshelfId, bookshelfStates);
     }
+
+    public String setNickname(Bookshelf bookshelf, String nickname) {
+        bookshelfRepositoryQuerydsl.setNickname(bookshelf, nickname);
+
+        return nickname;
+    }
 }

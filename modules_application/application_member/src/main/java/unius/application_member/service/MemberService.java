@@ -5,6 +5,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import unius.application_member.dto.GetMyUserInfoDto;
 import unius.application_member.dto.InitializeUserInfoDto;
+import unius.application_member.dto.SetUserNicknameDto;
 import unius.application_member.mapper.GetMyUserInfoMapper;
 import unius.domain_bookshelf.domain.Bookshelf;
 import unius.domain_bookshelf.service.BookshelfService;
@@ -16,8 +17,8 @@ import java.util.Objects;
 
 import static unius.core_user.type.UserState.INCOMPLETE;
 import static unius.core_user.type.UserState.VERIFIED;
-import static unius.system_exception.type.ExceptionType.ALREADY_EXIST_BOOKSHELF;
-import static unius.system_exception.type.ExceptionType.INVALID_USER;
+import static unius.domain_bookshelf.type.BookshelfState.ACTIVE;
+import static unius.system_exception.type.ExceptionType.*;
 
 @Service
 @RequiredArgsConstructor
@@ -53,5 +54,20 @@ public class MemberService {
         String uuid = bookshelfService.create(user, request.getNickname(), request.isOpen());
 
         return new InitializeUserInfoDto.Response(uuid);
+    }
+
+    @Transactional
+    public SetUserNicknameDto.Response setUserNickname(Long userId, SetUserNicknameDto.Request request) {
+        userValidator.of(userService.get(userId, VERIFIED))
+                .validate(Objects::nonNull, INVALID_USER)
+                .getOrThrow();
+
+        Bookshelf bookshelf = bookshelfValidator.of(bookshelfService.get(userId, ACTIVE))
+                .validate(Objects::nonNull, INVALID_BOOKSHELF)
+                .getOrThrow();
+
+        String nickname = bookshelfService.setNickname(bookshelf, request.getNickname());
+
+        return new SetUserNicknameDto.Response(nickname);
     }
 }
