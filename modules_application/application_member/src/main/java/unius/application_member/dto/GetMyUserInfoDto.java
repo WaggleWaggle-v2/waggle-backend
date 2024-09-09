@@ -12,5 +12,6 @@ public abstract class GetMyUserInfoDto {
     public static class Response {
         private Long id;
         private String userState;
+        private String uuid;
     }
 }

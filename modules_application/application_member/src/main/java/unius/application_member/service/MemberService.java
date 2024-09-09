@@ -36,7 +36,16 @@ public class MemberService {
                 .validate(Objects::nonNull, INVALID_USER)
                 .getOrThrow();
 
-        return GetMyUserInfoMapper.INSTANCE.toDto(user);
+        String uuid = null;
+
+        if(user.getUserState() == VERIFIED) {
+            Bookshelf bookshelf = bookshelfValidator.of(bookshelfService.get(userId, ACTIVE))
+                    .validate(Objects::nonNull, INVALID_BOOKSHELF)
+                    .getOrThrow();
+            uuid = bookshelf.getUuid();
+        }
+
+        return GetMyUserInfoMapper.INSTANCE.toDto(user, uuid);
     }
 
     @Transactional
