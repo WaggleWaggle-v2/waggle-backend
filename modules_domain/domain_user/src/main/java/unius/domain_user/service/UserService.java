@@ -3,6 +3,7 @@ package unius.domain_user.service;
 import jakarta.persistence.EntityManager;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import unius.core_user.type.UserState;
 import unius.domain_user.domain.User;
 import unius.domain_user.repository.UserRepository;
 import unius.domain_user.repository.UserRepositoryQuerydsl;
@@ -28,8 +29,12 @@ public class UserService {
         return user;
     }
 
-    public User get(Long userId) {
-        return userRepositoryQuerydsl.getUserInfo(userId);
+    public User get(Long userId, UserState... userStates) {
+        return userRepositoryQuerydsl.getUserInfo(userId, userStates);
+    }
+
+    public void setUserState(User user, UserState userState) {
+        userRepositoryQuerydsl.setUserState(user, userState);
     }
 
 }

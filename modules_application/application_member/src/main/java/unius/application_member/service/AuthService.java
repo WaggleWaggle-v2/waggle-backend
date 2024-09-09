@@ -22,7 +22,7 @@ public class AuthService {
     @Transactional
     public String googleLogin (String code) {
         String oAuthId = oAuthService.getGoogleAuthCode(code);
-        User user = oAuthInfoService.create(oAuthId, GOOGLE);
+        User user = oAuthInfoService.login(oAuthId, GOOGLE);
 
         GenerateTokenDto.Response token = tokenService.generateToken(user.getId(), user.getUserState());
 

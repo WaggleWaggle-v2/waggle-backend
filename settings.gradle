@@ -13,11 +13,13 @@ include('modules_application:application_member')
  * ====== */
 include('modules_core')
 include('modules_core:core_user')
+include('modules_core:core_uuid')
 
 /* ======== *
  * [DOMAIN] *
  * ======== */
 include('modules_domain')
+include('modules_domain:domain_bookshelf')
 include('modules_domain:domain_user')
 include('modules_domain:domain_oauth')
 
@@ -31,5 +33,6 @@ include('modules_independent:independent_jpa')
  * [SYSTEM] *
  * ======== */
 include('modules_system')
+include('modules_system:system_exception')
 include('modules_system:system_jwt')
 include('modules_system:system_oauth')

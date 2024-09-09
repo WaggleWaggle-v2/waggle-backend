@@ -7,17 +7,21 @@ import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 
 @SpringBootApplication(scanBasePackages = {
         "unius.application_member",
+        "unius.domain_bookshelf",
         "unius.domain_user",
         "unius.domain_oauth",
         "unius.independent_jpa",
+        "unius.system_exception",
         "unius.system_jwt",
         "unius.system_oauth"
 })
 @EnableJpaRepositories(basePackages = {
+        "unius.domain_bookshelf",
         "unius.domain_user",
         "unius.domain_oauth"
 })
 @EntityScan(basePackages = {
+        "unius.domain_bookshelf",
         "unius.domain_user",
         "unius.domain_oauth"
 })

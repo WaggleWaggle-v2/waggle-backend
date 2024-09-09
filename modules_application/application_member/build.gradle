@@ -41,11 +41,13 @@ dependencies {
 
     implementation project (":modules_core:core_user")
 
+    implementation project (":modules_domain:domain_bookshelf")
     implementation project (":modules_domain:domain_user")
     implementation project (":modules_domain:domain_oauth")
 
     implementation project (":modules_independent:independent_jpa")
 
+    implementation project (":modules_system:system_exception")
     implementation project (":modules_system:system_jwt")
     implementation project (":modules_system:system_oauth")
 }

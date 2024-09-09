@@ -21,11 +21,6 @@ public class User extends AuditingModel {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
 
-    @Column(columnDefinition = "VARCHAR(255) CHARACTER SET utf8 COLLATE utf8_general_ci")
-    private String nickname;
-
-    private String profileImageUrl;
-
     @Enumerated(EnumType.STRING)
     private UserState userState;
 }

@@ -11,8 +11,6 @@ public abstract class GetMyUserInfoDto {
     @RequiredArgsConstructor
     public static class Response {
         private Long id;
-        private String nickname;
-        private String profileImageUrl;
         private String userState;
     }
 }

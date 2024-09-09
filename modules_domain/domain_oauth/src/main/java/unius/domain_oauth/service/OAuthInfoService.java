@@ -18,7 +18,7 @@ public class OAuthInfoService {
 
     private final UserService userService;
 
-    public User create(String oAuthId, PlatformType platform) {
+    public User login(String oAuthId, PlatformType platform) {
         OAuthInfo oAuthInfo = oAuthInfoRepositoryQuerydsl.getOAuthInfo(oAuthId, platform);
         User user;
 

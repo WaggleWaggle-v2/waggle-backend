@@ -5,6 +5,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 import unius.application_member.dto.GetMyUserInfoDto;
+import unius.application_member.dto.InitializeUserInfoDto;
 import unius.application_member.service.MemberService;
 
 @Controller
@@ -20,10 +21,10 @@ public class MemberController {
         return ResponseEntity.ok(memberService.getMyUserInfo(Long.parseLong(id)));
     }
 
-//    @PostMapping("/initialize")
-//    public ResponseEntity<?> initializeUserInfo(
-//            @RequestHeader("X-User-Id-Header") String id,
-//            @ResponseBody ) {
-//
-//    }
+    @PostMapping("/init")
+    public ResponseEntity<InitializeUserInfoDto.Response> initializeUserInfo(
+            @RequestHeader("X-User-Id-Header") String id,
+            @RequestBody InitializeUserInfoDto.Request request) {
+        return ResponseEntity.ok(memberService.initializeUserInfo(Long.parseLong(id), request));
+    }
 }
