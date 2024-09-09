@@ -46,4 +46,16 @@ public class BookshelfRepositoryQuerydsl {
                 .where(condition)
                 .execute();
     }
+
+    public void setIsOpen(Bookshelf currentBookshelf, Boolean isOpen) {
+        BooleanExpression condition = bookshelf.eq(currentBookshelf)
+                .and(bookshelf.bookshelfState.eq(ACTIVE));
+
+        long rows = jpaQueryFactory.update(bookshelf)
+                .set(bookshelf.isOpen, isOpen)
+                .where(condition)
+                .execute();
+
+        System.out.println(rows);
+    }
 }

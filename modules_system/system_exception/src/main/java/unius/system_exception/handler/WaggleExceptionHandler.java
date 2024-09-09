@@ -1,6 +1,8 @@
 package unius.system_exception.handler;
 
+import jakarta.validation.UnexpectedTypeException;
 import org.springframework.http.ResponseEntity;
+import org.springframework.http.converter.HttpMessageNotReadableException;
 import org.springframework.web.HttpRequestMethodNotSupportedException;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.MissingServletRequestParameterException;
@@ -27,7 +29,9 @@ public class WaggleExceptionHandler {
 
     @ExceptionHandler({
             MethodArgumentNotValidException.class,
-            MethodArgumentTypeMismatchException.class})
+            MethodArgumentTypeMismatchException.class,
+            HttpMessageNotReadableException.class,
+            UnexpectedTypeException.class})
     public ResponseEntity<ExceptionDto> handleMethodArgumentExceptions() {
         return ResponseEntity
                 .status(BAD_REQUEST)

@@ -46,4 +46,8 @@ public class BookshelfService {
 
         return nickname;
     }
+
+    public void setIsOpen(Bookshelf bookshelf, Boolean isOpen) {
+        bookshelfRepositoryQuerydsl.setIsOpen(bookshelf, isOpen);
+    }
 }
