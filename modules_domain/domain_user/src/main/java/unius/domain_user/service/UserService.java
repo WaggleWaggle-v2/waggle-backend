@@ -4,6 +4,7 @@ import jakarta.persistence.EntityManager;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import unius.core_user.type.UserState;
+import unius.core_uuid.util.UuidUtils;
 import unius.domain_user.domain.User;
 import unius.domain_user.repository.UserRepository;
 import unius.domain_user.repository.UserRepositoryQuerydsl;
@@ -20,6 +21,7 @@ public class UserService {
 
     public User create() {
         User user = User.builder()
+                .id(UuidUtils.generateUuid())
                 .userState(INCOMPLETE)
                 .build();
 
