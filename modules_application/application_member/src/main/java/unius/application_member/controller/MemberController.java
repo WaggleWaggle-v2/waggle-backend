@@ -22,10 +22,11 @@ public class MemberController {
     }
 
     @PostMapping("/init")
-    public ResponseEntity<InitializeUserInfoDto.Response> initializeUserInfo(
+    public ResponseEntity<Void> initializeUserInfo(
             @RequestHeader("X-User-Id-Header") String id,
             @RequestBody @Valid InitializeUserInfoDto.Request request) {
-        return ResponseEntity.ok(memberService.initializeUserInfo(id, request));
+        memberService.initializeUserInfo(id, request);
+        return ResponseEntity.noContent().build();
     }
 
     @PatchMapping("/info/set/nickname")

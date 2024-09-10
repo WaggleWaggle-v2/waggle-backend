@@ -46,7 +46,7 @@ public class MemberService {
     }
 
     @Transactional
-    public InitializeUserInfoDto.Response initializeUserInfo(
+    public void initializeUserInfo(
             String userId,
             InitializeUserInfoDto.Request request) {
         User user = userValidator.of(userService.get(userId, INCOMPLETE))
@@ -58,9 +58,7 @@ public class MemberService {
                 .getOrThrow();
 
         userService.setUserState(user, VERIFIED);
-        String uuid = bookshelfService.create(user, request.getNickname(), request.getIsOpen());
-
-        return new InitializeUserInfoDto.Response(uuid);
+        bookshelfService.create(user, request.getNickname(), request.getIsOpen());
     }
 
     @Transactional

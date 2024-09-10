@@ -2,7 +2,6 @@ package unius.domain_bookshelf.service;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
-import unius.core_uuid.util.UuidUtils;
 import unius.domain_bookshelf.domain.Bookshelf;
 import unius.domain_bookshelf.repository.BookshelfRepository;
 import unius.domain_bookshelf.repository.BookshelfRepositoryQuerydsl;
@@ -21,8 +20,7 @@ public class BookshelfService {
 
     private final String BACKGROUND_BUCKET_PATH = "https://unius.s3.ap-northeast-2.amazonaws.com/bookshelf_image/WGWG-profile-Image-0";
 
-    public String create(User user, String nickname, boolean isOpen) {
-        String uuid = UuidUtils.generateUuid();
+    public void create(User user, String nickname, boolean isOpen) {
         String DEFAULT_BACKGROUND = BACKGROUND_BUCKET_PATH + "1.jpg";
 
         Bookshelf bookshelf = Bookshelf.builder()
@@ -36,8 +34,6 @@ public class BookshelfService {
                 .build();
 
         bookshelfRepository.save(bookshelf);
-
-        return uuid;
     }
 
     public Bookshelf get(String bookshelfId, BookshelfState... bookshelfStates) {
