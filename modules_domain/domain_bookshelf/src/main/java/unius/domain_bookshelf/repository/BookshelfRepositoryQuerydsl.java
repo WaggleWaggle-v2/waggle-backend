@@ -51,11 +51,19 @@ public class BookshelfRepositoryQuerydsl {
         BooleanExpression condition = bookshelf.eq(currentBookshelf)
                 .and(bookshelf.bookshelfState.eq(ACTIVE));
 
-        long rows = jpaQueryFactory.update(bookshelf)
+        jpaQueryFactory.update(bookshelf)
                 .set(bookshelf.isOpen, isOpen)
                 .where(condition)
                 .execute();
+    }
 
-        System.out.println(rows);
+    public void setBackgroundImageUrl(Bookshelf currentBookshelf, String backgroundImageUrl) {
+        BooleanExpression condition = bookshelf.eq(currentBookshelf)
+                .and(bookshelf.bookshelfState.eq(ACTIVE));
+
+        jpaQueryFactory.update(bookshelf)
+                .set(bookshelf.backgroundImageUrl, backgroundImageUrl)
+                .where(condition)
+                .execute();
     }
 }

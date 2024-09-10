@@ -3,10 +3,7 @@ package unius.application_member.service;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
-import unius.application_member.dto.GetMyUserInfoDto;
-import unius.application_member.dto.InitializeUserInfoDto;
-import unius.application_member.dto.SetBookshelfRevelationDto;
-import unius.application_member.dto.SetUserNicknameDto;
+import unius.application_member.dto.*;
 import unius.application_member.mapper.GetMyUserInfoMapper;
 import unius.domain_bookshelf.domain.Bookshelf;
 import unius.domain_bookshelf.service.BookshelfService;
@@ -94,5 +91,18 @@ public class MemberService {
                 .getOrThrow();
 
         bookshelfService.setIsOpen(bookshelf, request.getIsOpen());
+    }
+
+    @Transactional
+    public void setBookshelfBackground(Long userId, SetBookshelfBackgroundDto.Request request) {
+        userValidator.of(userService.get(userId, VERIFIED))
+                .validate(Objects::nonNull, INVALID_USER)
+                .getOrThrow();
+
+        Bookshelf bookshelf = bookshelfValidator.of(bookshelfService.get(userId, ACTIVE))
+                .validate(Objects::nonNull, INVALID_BOOKSHELF)
+                .getOrThrow();
+
+        bookshelfService.setProfileImage(bookshelf, request.getNumber());
     }
 }

@@ -5,10 +5,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
-import unius.application_member.dto.GetMyUserInfoDto;
-import unius.application_member.dto.InitializeUserInfoDto;
-import unius.application_member.dto.SetBookshelfRevelationDto;
-import unius.application_member.dto.SetUserNicknameDto;
+import unius.application_member.dto.*;
 import unius.application_member.service.MemberService;
 
 @Controller
@@ -43,6 +40,14 @@ public class MemberController {
             @RequestHeader("X-User-Id-Header") String id,
             @RequestBody @Valid SetBookshelfRevelationDto.Request request) {
         memberService.setBookshelfRevelation(Long.parseLong(id), request);
+        return ResponseEntity.noContent().build();
+    }
+
+    @PatchMapping("/bookshelf/set/background")
+    public ResponseEntity<Void> setBookshelfBackground(
+            @RequestHeader("X-User-Id-Header") String id,
+            @RequestBody @Valid SetBookshelfBackgroundDto.Request request) {
+        memberService.setBookshelfBackground(Long.parseLong(id), request);
         return ResponseEntity.noContent().build();
     }
 }

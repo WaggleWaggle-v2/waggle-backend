@@ -19,13 +19,17 @@ public class BookshelfService {
     private final BookshelfRepository bookshelfRepository;
     private final BookshelfRepositoryQuerydsl bookshelfRepositoryQuerydsl;
 
+    private final String BACKGROUND_BUCKET_PATH = "https://unius.s3.ap-northeast-2.amazonaws.com/bookshelf_image/WGWG-profile-Image-0";
+
     public String create(User user, String nickname, boolean isOpen) {
         String uuid = UuidUtils.generateUuid();
+        String DEFAULT_BACKGROUND = BACKGROUND_BUCKET_PATH + "1.jpg";
 
         Bookshelf bookshelf = Bookshelf.builder()
                 .user(user)
                 .nickname(nickname)
                 .isOpen(isOpen)
+                .backgroundImageUrl(DEFAULT_BACKGROUND)
                 .bookshelfType(WHITE)
                 .bookshelfState(ACTIVE)
                 .count(0L)
@@ -49,5 +53,9 @@ public class BookshelfService {
 
     public void setIsOpen(Bookshelf bookshelf, Boolean isOpen) {
         bookshelfRepositoryQuerydsl.setIsOpen(bookshelf, isOpen);
+    }
+
+    public void setProfileImage(Bookshelf bookshelf, Integer num) {
+        bookshelfRepositoryQuerydsl.setBackgroundImageUrl(bookshelf, BACKGROUND_BUCKET_PATH + num + ".jpg");
     }
 }
