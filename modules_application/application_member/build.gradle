@@ -48,6 +48,7 @@ dependencies {
     implementation project (":modules_domain:domain_user")
     implementation project (":modules_domain:domain_oauth")
 
+    implementation project (":modules_independent:independent_s3")
     implementation project (":modules_independent:independent_jpa")
 
     implementation project (":modules_system:system_exception")

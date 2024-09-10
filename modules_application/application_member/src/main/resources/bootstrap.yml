@@ -4,6 +4,7 @@ spring:
       - jwt
       - jpa-${BOOT_ENV}
       - oauth
+      - s3
   cloud:
     config:
       uri: ${CONFIG_URI}

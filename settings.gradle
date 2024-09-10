@@ -27,6 +27,7 @@ include('modules_domain:domain_oauth')
  * [INDEPENDENT] *
  * ============= */
 include('modules_independent')
+include('modules_independent:independent_s3')
 include('modules_independent:independent_jpa')
 
 /* ======== *

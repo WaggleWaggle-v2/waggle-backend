@@ -10,6 +10,7 @@ import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
         "unius.domain_bookshelf",
         "unius.domain_user",
         "unius.domain_oauth",
+        "unius.independent_s3",
         "unius.independent_jpa",
         "unius.system_exception",
         "unius.system_jwt",
