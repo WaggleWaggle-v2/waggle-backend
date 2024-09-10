@@ -5,5 +5,5 @@ import org.springframework.stereotype.Repository;
 import unius.domain_bookshelf.domain.Bookshelf;
 
 @Repository
-public interface BookshelfRepository extends JpaRepository<Bookshelf, Long> {
+public interface BookshelfRepository extends JpaRepository<Bookshelf, String> {
 }

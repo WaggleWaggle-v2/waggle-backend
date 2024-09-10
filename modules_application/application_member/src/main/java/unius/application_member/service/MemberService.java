@@ -28,28 +28,26 @@ public class MemberService {
     private final UserService userService;
     private final BookshelfService bookshelfService;
 
-    public GetMyUserInfoDto.Response getMyUserInfo(Long userId) {
+    public GetMyUserInfoDto.Response getMyUserInfo(String userId) {
         User user = userValidator.of(userService.get(userId, VERIFIED, INCOMPLETE))
                 .validate(Objects::nonNull, INVALID_USER)
                 .getOrThrow();
 
-        String uuid = null;
         String nickname = null;
 
         if(user.getUserState() == VERIFIED) {
             Bookshelf bookshelf = bookshelfValidator.of(bookshelfService.get(userId, ACTIVE))
                     .validate(Objects::nonNull, INVALID_BOOKSHELF)
                     .getOrThrow();
-            uuid = bookshelf.getUuid();
             nickname = bookshelf.getNickname();
         }
 
-        return GetMyUserInfoMapper.INSTANCE.toDto(user, uuid, nickname);
+        return GetMyUserInfoMapper.INSTANCE.toDto(user, nickname);
     }
 
     @Transactional
     public InitializeUserInfoDto.Response initializeUserInfo(
-            Long userId,
+            String userId,
             InitializeUserInfoDto.Request request) {
         User user = userValidator.of(userService.get(userId, INCOMPLETE))
                 .validate(Objects::nonNull, INVALID_USER)
@@ -66,7 +64,7 @@ public class MemberService {
     }
 
     @Transactional
-    public SetUserNicknameDto.Response setUserNickname(Long userId, SetUserNicknameDto.Request request) {
+    public SetUserNicknameDto.Response setUserNickname(String userId, SetUserNicknameDto.Request request) {
         userValidator.of(userService.get(userId, VERIFIED))
                 .validate(Objects::nonNull, INVALID_USER)
                 .getOrThrow();
@@ -81,7 +79,7 @@ public class MemberService {
     }
 
     @Transactional
-    public void setBookshelfRevelation(Long userId, SetBookshelfRevelationDto.Request request) {
+    public void setBookshelfRevelation(String userId, SetBookshelfRevelationDto.Request request) {
         userValidator.of(userService.get(userId, VERIFIED))
                 .validate(Objects::nonNull, INVALID_USER)
                 .getOrThrow();
@@ -94,7 +92,7 @@ public class MemberService {
     }
 
     @Transactional
-    public void setBookshelfBackground(Long userId, SetBookshelfBackgroundDto.Request request) {
+    public void setBookshelfBackground(String userId, SetBookshelfBackgroundDto.Request request) {
         userValidator.of(userService.get(userId, VERIFIED))
                 .validate(Objects::nonNull, INVALID_USER)
                 .getOrThrow();

@@ -10,9 +10,8 @@ public abstract class GetMyUserInfoDto {
     @Getter
     @RequiredArgsConstructor
     public static class Response {
-        private Long id;
+        private String id;
         private String userState;
-        private String uuid;
         private String nickname;
     }
 }

@@ -32,5 +32,7 @@ dependencies {
 	runtimeOnly 'org.mariadb.jdbc:mariadb-java-client'
 
 	implementation project(":modules_core:core_user")
+	implementation project(":modules_core:core_uuid")
+
 	implementation project(":modules_independent:independent_jpa")
 }

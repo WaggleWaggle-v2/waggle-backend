@@ -24,8 +24,8 @@ public class TokenService {
     @Value("${spring.jwt.secret}")
     private String jwtPrivateKey;
 
-    public Response generateToken(Long id, UserState userState) {
-        Claims claims = Jwts.claims().setSubject(String.valueOf(id));
+    public Response generateToken(String id, UserState userState) {
+        Claims claims = Jwts.claims().setSubject(id);
         claims.put(KEY_STATE.getDescription(), userState.getDescription());
 
         Date now = new Date();

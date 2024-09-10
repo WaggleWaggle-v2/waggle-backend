@@ -29,7 +29,7 @@ public class UserService {
         return user;
     }
 
-    public User get(Long userId, UserState... userStates) {
+    public User get(String userId, UserState... userStates) {
         return userRepositoryQuerydsl.getUserInfo(userId, userStates);
     }
 

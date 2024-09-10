@@ -33,7 +33,6 @@ public class BookshelfService {
                 .bookshelfType(WHITE)
                 .bookshelfState(ACTIVE)
                 .count(0L)
-                .uuid(uuid)
                 .build();
 
         bookshelfRepository.save(bookshelf);
@@ -41,7 +40,7 @@ public class BookshelfService {
         return uuid;
     }
 
-    public Bookshelf get(Long bookshelfId, BookshelfState... bookshelfStates) {
+    public Bookshelf get(String bookshelfId, BookshelfState... bookshelfStates) {
         return bookshelfRepositoryQuerydsl.getBookshelf(bookshelfId, bookshelfStates);
     }
 

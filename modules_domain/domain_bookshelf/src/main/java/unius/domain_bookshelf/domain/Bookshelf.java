@@ -20,7 +20,7 @@ import unius.independent_jpa.model.AuditingModel;
 public class Bookshelf extends AuditingModel {
 
     @Id
-    private long id;
+    private String id;
 
     @Column(nullable = false,
             columnDefinition = "VARCHAR(255) CHARACTER SET utf8 COLLATE utf8_general_ci")
@@ -38,10 +38,6 @@ public class Bookshelf extends AuditingModel {
 
     @Column(nullable = false)
     private boolean isOpen;
-
-    @Column(nullable = false,
-            unique = true)
-    private String uuid;
 
     @Column(nullable = false)
     private Long count;

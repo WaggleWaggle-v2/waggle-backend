@@ -18,28 +18,28 @@ public class MemberController {
     @GetMapping("/info/me")
     public ResponseEntity<GetMyUserInfoDto.Response> getMyUserInfo(
             @RequestHeader("X-User-Id-Header") String id) {
-        return ResponseEntity.ok(memberService.getMyUserInfo(Long.parseLong(id)));
+        return ResponseEntity.ok(memberService.getMyUserInfo(id));
     }
 
     @PostMapping("/init")
     public ResponseEntity<InitializeUserInfoDto.Response> initializeUserInfo(
             @RequestHeader("X-User-Id-Header") String id,
             @RequestBody @Valid InitializeUserInfoDto.Request request) {
-        return ResponseEntity.ok(memberService.initializeUserInfo(Long.parseLong(id), request));
+        return ResponseEntity.ok(memberService.initializeUserInfo(id, request));
     }
 
     @PatchMapping("/info/set/nickname")
     public ResponseEntity<SetUserNicknameDto.Response> setUserNickname(
             @RequestHeader("X-User-Id-Header") String id,
             @RequestBody @Valid SetUserNicknameDto.Request request) {
-        return ResponseEntity.ok(memberService.setUserNickname(Long.parseLong(id), request));
+        return ResponseEntity.ok(memberService.setUserNickname(id, request));
     }
 
     @PatchMapping("/bookshelf/set/revelation")
     public ResponseEntity<Void> setBookshelfRevelation(
             @RequestHeader("X-User-Id-Header") String id,
             @RequestBody @Valid SetBookshelfRevelationDto.Request request) {
-        memberService.setBookshelfRevelation(Long.parseLong(id), request);
+        memberService.setBookshelfRevelation(id, request);
         return ResponseEntity.noContent().build();
     }
 
@@ -47,7 +47,7 @@ public class MemberController {
     public ResponseEntity<Void> setBookshelfBackground(
             @RequestHeader("X-User-Id-Header") String id,
             @RequestBody @Valid SetBookshelfBackgroundDto.Request request) {
-        memberService.setBookshelfBackground(Long.parseLong(id), request);
+        memberService.setBookshelfBackground(id, request);
         return ResponseEntity.noContent().build();
     }
 }

@@ -17,7 +17,7 @@ public class BookshelfRepositoryQuerydsl {
 
     private final JPAQueryFactory jpaQueryFactory;
 
-    public Bookshelf getBookshelf(Long id, BookshelfState... bookshelfStates) {
+    public Bookshelf getBookshelf(String id, BookshelfState... bookshelfStates) {
         BooleanExpression condition;
 
         if(bookshelfStates == null || bookshelfStates.length == 0) {

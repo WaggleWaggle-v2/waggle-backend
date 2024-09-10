@@ -19,7 +19,7 @@ import unius.independent_jpa.model.AuditingModel;
 public class OAuthInfo extends AuditingModel {
 
     @Id
-    private Long id;
+    private String id;
 
     @Column(nullable = false)
     private String oauthId;

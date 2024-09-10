@@ -17,7 +17,7 @@ import static unius.domain_user.domain.QUser.user;
 public class UserRepositoryQuerydsl {
     private final JPAQueryFactory jpaQueryFactory;
 
-    public User getUserInfo(Long id, UserState... userStates) {
+    public User getUserInfo(String id, UserState... userStates) {
         BooleanExpression condition;
 
         if(userStates == null || userStates.length == 0) {
