@@ -1,6 +1,5 @@
 package unius.domain_user.service;
 
-import jakarta.persistence.EntityManager;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import unius.core_user.type.UserState;
@@ -15,7 +14,6 @@ import static unius.core_user.type.UserState.INCOMPLETE;
 @RequiredArgsConstructor
 public class UserService {
 
-    private final EntityManager entityManager;
     private final UserRepository userRepository;
     private final UserRepositoryQuerydsl userRepositoryQuerydsl;
 
@@ -26,7 +24,6 @@ public class UserService {
                 .build();
 
         userRepository.save(user);
-        entityManager.flush();
 
         return user;
     }

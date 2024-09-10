@@ -18,7 +18,7 @@ import unius.independent_jpa.model.AuditingModel;
 public class User extends AuditingModel {
 
     @Id
-    @Column(nullable = false, updatable = false, unique = true)
+    @Column(nullable = false, updatable = false)
     private String id;
 
     @Enumerated(EnumType.STRING)
