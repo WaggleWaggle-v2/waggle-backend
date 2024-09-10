@@ -29,5 +29,6 @@ public class OAuthInfo extends AuditingModel {
 
     @MapsId
     @OneToOne
+    @JoinColumn(name = "id")
     private User user;
 }

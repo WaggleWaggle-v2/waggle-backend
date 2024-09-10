@@ -24,6 +24,7 @@ public class OAuthInfoService {
 
         if(oAuthInfo == null) {
             user = userService.create();
+
             oAuthInfo = OAuthInfo.builder()
                     .oauthId(oAuthId)
                     .platform(platform)
