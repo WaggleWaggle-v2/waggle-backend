@@ -12,5 +12,6 @@ public interface GetMyUserInfoMapper {
 
     @Mapping(target = "userState", expression = "java(user.getUserState().getDescription())")
     @Mapping(source = "uuid", target = "uuid")
-    GetMyUserInfoDto.Response toDto(User user, String uuid);
+    @Mapping(source = "nickname", target = "nickname")
+    GetMyUserInfoDto.Response toDto(User user, String uuid, String nickname);
 }

@@ -13,5 +13,6 @@ public abstract class GetMyUserInfoDto {
         private Long id;
         private String userState;
         private String uuid;
+        private String nickname;
     }
 }
