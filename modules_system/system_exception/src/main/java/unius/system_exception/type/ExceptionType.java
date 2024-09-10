@@ -10,6 +10,9 @@ public enum ExceptionType {
     MISMATCH_ARGUMENT("입력 인자 형식이 잘못되었습니다.", 400),
     MISMATCH_PARAMETER("입력 매개변수 형식이 잘못되었습니다.", 400),
 
+    // 403 FORBIDDEN
+    HAVE_NO_PERMISSION("권한이 없습니다", 403),
+
     // 405 METHOD_NOT_ALLOWED
     DISALLOWED_METHOD("허용되지 않은 메소드입니다.", 405),
 

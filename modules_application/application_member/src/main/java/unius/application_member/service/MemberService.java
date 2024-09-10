@@ -4,6 +4,7 @@ import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import unius.application_member.dto.*;
+import unius.application_member.mapper.GetBookshelfInfoMapper;
 import unius.application_member.mapper.GetMyUserInfoMapper;
 import unius.domain_bookshelf.domain.Bookshelf;
 import unius.domain_bookshelf.service.BookshelfService;
@@ -100,5 +101,27 @@ public class MemberService {
                 .getOrThrow();
 
         bookshelfService.setProfileImage(bookshelf, request.getNumber());
+    }
+
+    public GetBookshelfInfoDto.Response getBookshelfInfo(String userId, String uuid) {
+        Bookshelf bookshelf;
+
+        if(userId == null || userId.isEmpty()) {
+            bookshelf = bookshelfValidator.of(bookshelfService.get(uuid, ACTIVE))
+                    .validate(Objects::nonNull, INVALID_BOOKSHELF)
+                    .validate(Bookshelf::isOpen, HAVE_NO_PERMISSION)
+                    .getOrThrow();
+        } else {
+            userValidator.of(userService.get(userId, VERIFIED))
+                    .validate(Objects::nonNull, INVALID_USER)
+                    .getOrThrow();
+
+            bookshelf = bookshelfValidator.of(bookshelfService.get(uuid, ACTIVE))
+                    .validate(Objects::nonNull, INVALID_BOOKSHELF)
+                    .validate(bs -> bs.isOpen() || bs.getId().equals(userId), HAVE_NO_PERMISSION)
+                    .getOrThrow();
+        }
+
+        return GetBookshelfInfoMapper.INSTANCE.toDto(bookshelf);
     }
 }

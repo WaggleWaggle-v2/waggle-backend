@@ -26,6 +26,20 @@ public class JwtFilter extends AbstractGatewayFilterFactory<JwtFilter.Config> {
                 return chain.filter(exchange);
             }
 
+            if(exchange.getRequest().getPath().toString().startsWith("/unius/member/bookshelf/get")) {
+                String token = exchange.getRequest().getHeaders().getFirst("Authorization");
+
+                if(tokenService.validateToken(token)){
+                    return chain.filter(exchange);
+                } else {
+                    ServerHttpRequest request = exchange.getRequest().mutate()
+                            .header("X-User-Id-Header", tokenService.getId(token))
+                            .build();
+
+                    return chain.filter(exchange.mutate().request(request).build());
+                }
+            }
+
             String token = exchange.getRequest().getHeaders().getFirst("Authorization");
 
             if(tokenService.validateToken(token)){

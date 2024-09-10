@@ -51,4 +51,11 @@ public class MemberController {
         memberService.setBookshelfBackground(id, request);
         return ResponseEntity.noContent().build();
     }
+
+    @GetMapping("/bookshelf/get")
+    public ResponseEntity<?> getBookshelfInfo(
+            @RequestHeader(value = "X-User-Id-Header", required = false) String id,
+            @RequestParam String user) {
+        return ResponseEntity.ok(memberService.getBookshelfInfo(id, user));
+    }
 }
