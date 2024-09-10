@@ -27,7 +27,7 @@ public class UserService {
 
         userRepository.save(user);
         entityManager.flush();
-        entityManager.detach(user);
+        entityManager.clear();
 
         return user;
     }
