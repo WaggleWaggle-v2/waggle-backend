@@ -1,5 +1,6 @@
 package unius.domain_oauth.service;
 
+import jakarta.persistence.EntityManager;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import unius.domain_oauth.domain.OAuthInfo;
@@ -13,6 +14,8 @@ import unius.domain_user.service.UserService;
 @RequiredArgsConstructor
 public class OAuthInfoService {
 
+    private final EntityManager entityManager;
+
     private final OAuthInfoRepository oAuthInfoRepository;
     private final OAuthInfoRepositoryQuerydsl oAuthInfoRepositoryQuerydsl;
 
@@ -25,10 +28,12 @@ public class OAuthInfoService {
         if(oAuthInfo == null) {
             user = userService.create();
 
+            User proxyUser = entityManager.find(User.class, user.getId());
+
             oAuthInfo = OAuthInfo.builder()
                     .oauthId(oAuthId)
                     .platform(platform)
-                    .user(user)
+                    .user(proxyUser)
                     .build();
 
             oAuthInfoRepository.save(oAuthInfo);
