@@ -8,9 +8,12 @@ import unius.domain_bookshelf.domain.Bookshelf;
 import unius.domain_bookshelf.type.BookshelfState;
 import unius.domain_bookshelf.type.BookshelfType;
 
+import java.util.List;
+
 import static com.querydsl.core.types.dsl.Expressions.FALSE;
 import static unius.domain_bookshelf.domain.QBookshelf.bookshelf;
 import static unius.domain_bookshelf.type.BookshelfState.ACTIVE;
+import static unius.domain_user.domain.QUser.user;
 
 @Repository
 @RequiredArgsConstructor
@@ -36,6 +39,17 @@ public class BookshelfRepositoryQuerydsl {
                 .selectFrom(bookshelf)
                 .where(condition)
                 .fetchOne();
+    }
+
+    public List<Bookshelf> getRandomBookshelves() {
+        BooleanExpression condition = bookshelf.isOpen.eq(true)
+                .and(bookshelf.bookshelfState.eq(ACTIVE));
+
+        return jpaQueryFactory.selectFrom(bookshelf)
+                .join(bookshelf.user, user).fetchJoin()
+                .where(condition)
+                .limit(3)
+                .fetch();
     }
 
     public void setNickname(Bookshelf currentBookshelf, String nickname) {

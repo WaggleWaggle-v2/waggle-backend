@@ -8,6 +8,8 @@ import org.springframework.web.bind.annotation.*;
 import unius.application_member.dto.*;
 import unius.application_member.service.MemberService;
 
+import java.util.List;
+
 @Controller
 @RequestMapping("/unius/member")
 @RequiredArgsConstructor
@@ -69,9 +71,14 @@ public class MemberController {
     }
 
     @GetMapping("/bookshelf/get")
-    public ResponseEntity<?> getBookshelfInfo(
+    public ResponseEntity<GetBookshelfInfoDto.Response> getBookshelfInfo(
             @RequestHeader(value = "X-User-Id-Header", required = false) String id,
             @RequestParam String user) {
         return ResponseEntity.ok(memberService.getBookshelfInfo(id, user));
+    }
+
+    @GetMapping("/bookshelf/get/random")
+    public ResponseEntity<List<GetRandomBookshelfInfoDto.Response>> getRandomBookshelfInfo() {
+        return ResponseEntity.ok(memberService.getRandomBookshelfInfo());
     }
 }

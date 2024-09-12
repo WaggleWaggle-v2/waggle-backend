@@ -6,6 +6,7 @@ import org.springframework.stereotype.Service;
 import unius.application_member.dto.*;
 import unius.application_member.mapper.GetBookshelfInfoMapper;
 import unius.application_member.mapper.GetMyUserInfoMapper;
+import unius.application_member.mapper.GetRandomBookshelfInfoMapper;
 import unius.domain_bookshelf.domain.Bookshelf;
 import unius.domain_bookshelf.service.BookshelfService;
 import unius.domain_bookshelf.type.BookshelfType;
@@ -14,6 +15,7 @@ import unius.domain_user.service.UserService;
 import unius.system_exception.component.DomainValidator;
 import unius.system_exception.exception.WaggleException;
 
+import java.util.List;
 import java.util.Objects;
 
 import static unius.core_user.type.UserState.INCOMPLETE;
@@ -156,5 +158,11 @@ public class MemberService {
         }
 
         return GetBookshelfInfoMapper.INSTANCE.toDto(bookshelf);
+    }
+
+    public List<GetRandomBookshelfInfoDto.Response> getRandomBookshelfInfo() {
+        List<Bookshelf> bookshelfList = bookshelfService.getRandom();
+
+        return GetRandomBookshelfInfoMapper.INSTANCE.toDtoList(bookshelfList);
     }
 }

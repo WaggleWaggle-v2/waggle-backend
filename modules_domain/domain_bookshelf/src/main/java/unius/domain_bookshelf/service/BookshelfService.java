@@ -9,6 +9,8 @@ import unius.domain_bookshelf.type.BookshelfState;
 import unius.domain_bookshelf.type.BookshelfType;
 import unius.domain_user.domain.User;
 
+import java.util.List;
+
 import static unius.domain_bookshelf.type.BookshelfState.ACTIVE;
 import static unius.domain_bookshelf.type.BookshelfType.WHITE;
 
@@ -39,6 +41,10 @@ public class BookshelfService {
 
     public Bookshelf get(String bookshelfId, BookshelfState... bookshelfStates) {
         return bookshelfRepositoryQuerydsl.getBookshelf(bookshelfId, bookshelfStates);
+    }
+
+    public List<Bookshelf> getRandom() {
+        return bookshelfRepositoryQuerydsl.getRandomBookshelves();
     }
 
     public String setNickname(Bookshelf bookshelf, String nickname) {
