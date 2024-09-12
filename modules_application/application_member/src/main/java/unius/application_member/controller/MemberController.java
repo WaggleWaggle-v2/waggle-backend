@@ -52,6 +52,14 @@ public class MemberController {
         return ResponseEntity.noContent().build();
     }
 
+    @PatchMapping("/bookshelf/set/theme")
+    public ResponseEntity<Void> setBookshelfTheme(
+            @RequestHeader("X-User-Id-Header") String id,
+            @RequestBody @Valid SetBookshelfThemeDto.Request request) {
+        memberService.setBookshelfTheme(id, request);
+        return ResponseEntity.noContent().build();
+    }
+
     @GetMapping("/bookshelf/get")
     public ResponseEntity<?> getBookshelfInfo(
             @RequestHeader(value = "X-User-Id-Header", required = false) String id,

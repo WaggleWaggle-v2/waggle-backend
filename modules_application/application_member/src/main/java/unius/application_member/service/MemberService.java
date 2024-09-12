@@ -8,9 +8,11 @@ import unius.application_member.mapper.GetBookshelfInfoMapper;
 import unius.application_member.mapper.GetMyUserInfoMapper;
 import unius.domain_bookshelf.domain.Bookshelf;
 import unius.domain_bookshelf.service.BookshelfService;
+import unius.domain_bookshelf.type.BookshelfType;
 import unius.domain_user.domain.User;
 import unius.domain_user.service.UserService;
 import unius.system_exception.component.DomainValidator;
+import unius.system_exception.exception.WaggleException;
 
 import java.util.Objects;
 
@@ -101,6 +103,24 @@ public class MemberService {
                 .getOrThrow();
 
         bookshelfService.setProfileImage(bookshelf, request.getNumber());
+    }
+
+    @Transactional
+    public void setBookshelfTheme(String userId, SetBookshelfThemeDto.Request request) {
+        userValidator.of(userService.get(userId, VERIFIED))
+                .validate(Objects::nonNull, INVALID_USER)
+                .getOrThrow();
+
+        Bookshelf bookshelf = bookshelfValidator.of(bookshelfService.get(userId, ACTIVE))
+                .validate(Objects::nonNull, INVALID_BOOKSHELF)
+                .getOrThrow();
+
+        try {
+            bookshelfService.setTheme(bookshelf, Enum.valueOf(BookshelfType.class, request.getTheme()));
+        } catch (IllegalArgumentException e) {
+            throw new WaggleException(MISMATCH_ARGUMENT);
+        }
+
     }
 
     public GetBookshelfInfoDto.Response getBookshelfInfo(String userId, String uuid) {

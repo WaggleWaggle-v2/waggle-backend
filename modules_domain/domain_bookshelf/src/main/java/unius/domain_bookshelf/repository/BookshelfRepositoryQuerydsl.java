@@ -6,6 +6,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
 import unius.domain_bookshelf.domain.Bookshelf;
 import unius.domain_bookshelf.type.BookshelfState;
+import unius.domain_bookshelf.type.BookshelfType;
 
 import static com.querydsl.core.types.dsl.Expressions.FALSE;
 import static unius.domain_bookshelf.domain.QBookshelf.bookshelf;
@@ -63,6 +64,16 @@ public class BookshelfRepositoryQuerydsl {
 
         jpaQueryFactory.update(bookshelf)
                 .set(bookshelf.backgroundImageUrl, backgroundImageUrl)
+                .where(condition)
+                .execute();
+    }
+
+    public void setBookshelfType(Bookshelf currentBookshelf, BookshelfType bookshelfType) {
+        BooleanExpression condition = bookshelf.eq(currentBookshelf)
+                .and(bookshelf.bookshelfState.eq(ACTIVE));
+
+        jpaQueryFactory.update(bookshelf)
+                .set(bookshelf.bookshelfType, bookshelfType)
                 .where(condition)
                 .execute();
     }

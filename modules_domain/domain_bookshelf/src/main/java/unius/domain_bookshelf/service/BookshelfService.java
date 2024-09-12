@@ -6,6 +6,7 @@ import unius.domain_bookshelf.domain.Bookshelf;
 import unius.domain_bookshelf.repository.BookshelfRepository;
 import unius.domain_bookshelf.repository.BookshelfRepositoryQuerydsl;
 import unius.domain_bookshelf.type.BookshelfState;
+import unius.domain_bookshelf.type.BookshelfType;
 import unius.domain_user.domain.User;
 
 import static unius.domain_bookshelf.type.BookshelfState.ACTIVE;
@@ -52,5 +53,9 @@ public class BookshelfService {
 
     public void setProfileImage(Bookshelf bookshelf, Integer num) {
         bookshelfRepositoryQuerydsl.setBackgroundImageUrl(bookshelf, BACKGROUND_BUCKET_PATH + num + ".jpg");
+    }
+
+    public void setTheme(Bookshelf bookshelf, BookshelfType bookshelfType) {
+        bookshelfRepositoryQuerydsl.setBookshelfType(bookshelf, bookshelfType);
     }
 }
