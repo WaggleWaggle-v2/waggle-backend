@@ -5,6 +5,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.http.converter.HttpMessageNotReadableException;
 import org.springframework.web.HttpRequestMethodNotSupportedException;
 import org.springframework.web.bind.MethodArgumentNotValidException;
+import org.springframework.web.bind.MissingRequestHeaderException;
 import org.springframework.web.bind.MissingServletRequestParameterException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
@@ -43,6 +44,13 @@ public class WaggleExceptionHandler {
         return ResponseEntity
                 .status(BAD_REQUEST)
                 .body(new ExceptionDto(MISMATCH_PARAMETER));
+    }
+
+    @ExceptionHandler(MissingRequestHeaderException.class)
+    public ResponseEntity<ExceptionDto> handleMissingRequestHeaderExceptions() {
+        return ResponseEntity
+                .status(BAD_REQUEST)
+                .body(new ExceptionDto(MISMATCH_HEADER));
     }
 
     @ExceptionHandler(WaggleException.class)

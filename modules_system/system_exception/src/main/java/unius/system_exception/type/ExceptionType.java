@@ -9,6 +9,7 @@ public enum ExceptionType {
     // 400 BAD_REQUEST
     MISMATCH_ARGUMENT("입력 인자 형식이 잘못되었습니다.", 400),
     MISMATCH_PARAMETER("입력 매개변수 형식이 잘못되었습니다.", 400),
+    MISMATCH_HEADER("입력 헤더 형식이 잘못되었습니다.", 400),
 
     // 403 FORBIDDEN
     HAVE_NO_PERMISSION("권한이 없습니다", 403),
