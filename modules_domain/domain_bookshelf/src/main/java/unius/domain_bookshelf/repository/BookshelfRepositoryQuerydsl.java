@@ -1,6 +1,7 @@
 package unius.domain_bookshelf.repository;
 
 import com.querydsl.core.types.dsl.BooleanExpression;
+import com.querydsl.core.types.dsl.Expressions;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
@@ -48,6 +49,7 @@ public class BookshelfRepositoryQuerydsl {
         return jpaQueryFactory.selectFrom(bookshelf)
                 .join(bookshelf.user, user).fetchJoin()
                 .where(condition)
+                .orderBy(Expressions.numberTemplate(Double.class, "function('RAND')").asc())
                 .limit(3)
                 .fetch();
     }
