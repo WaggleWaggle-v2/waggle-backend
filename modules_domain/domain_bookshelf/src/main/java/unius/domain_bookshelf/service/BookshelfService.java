@@ -58,4 +58,8 @@ public class BookshelfService {
     public void setTheme(Bookshelf bookshelf, BookshelfType bookshelfType) {
         bookshelfRepositoryQuerydsl.setBookshelfType(bookshelf, bookshelfType);
     }
+
+    public void setIntroduction(Bookshelf bookshelf, String introduction) {
+        bookshelfRepositoryQuerydsl.setIntroduction(bookshelf, introduction);
+    }
 }

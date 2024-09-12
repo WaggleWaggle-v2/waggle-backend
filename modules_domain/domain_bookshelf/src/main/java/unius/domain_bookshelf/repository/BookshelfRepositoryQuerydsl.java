@@ -77,4 +77,14 @@ public class BookshelfRepositoryQuerydsl {
                 .where(condition)
                 .execute();
     }
+
+    public void setIntroduction(Bookshelf currentBookshelf, String introduction) {
+        BooleanExpression condition = bookshelf.eq(currentBookshelf)
+                .and(bookshelf.bookshelfState.eq(ACTIVE));
+
+        jpaQueryFactory.update(bookshelf)
+                .set(bookshelf.introduction, introduction)
+                .where(condition)
+                .execute();
+    }
 }

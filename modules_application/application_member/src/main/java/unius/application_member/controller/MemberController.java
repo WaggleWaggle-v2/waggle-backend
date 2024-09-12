@@ -60,6 +60,14 @@ public class MemberController {
         return ResponseEntity.noContent().build();
     }
 
+    @PatchMapping("/bookshelf/set/introduction")
+    public ResponseEntity<Void> setBookshelfIntroduction(
+            @RequestHeader("X-User-Id-Header") String id,
+            @RequestBody @Valid SetBookshelfIntroductionDto.Request request) {
+        memberService.setBookshelfIntroduction(id, request);
+        return ResponseEntity.noContent().build();
+    }
+
     @GetMapping("/bookshelf/get")
     public ResponseEntity<?> getBookshelfInfo(
             @RequestHeader(value = "X-User-Id-Header", required = false) String id,

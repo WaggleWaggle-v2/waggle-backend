@@ -123,6 +123,19 @@ public class MemberService {
 
     }
 
+    @Transactional
+    public void setBookshelfIntroduction(String userId, SetBookshelfIntroductionDto.Request request) {
+        userValidator.of(userService.get(userId, VERIFIED))
+                .validate(Objects::nonNull, INVALID_USER)
+                .getOrThrow();
+
+        Bookshelf bookshelf = bookshelfValidator.of(bookshelfService.get(userId, ACTIVE))
+                .validate(Objects::nonNull, INVALID_BOOKSHELF)
+                .getOrThrow();
+
+        bookshelfService.setIntroduction(bookshelf, request.getIntroduction());
+    }
+
     public GetBookshelfInfoDto.Response getBookshelfInfo(String userId, String uuid) {
         Bookshelf bookshelf;
 
