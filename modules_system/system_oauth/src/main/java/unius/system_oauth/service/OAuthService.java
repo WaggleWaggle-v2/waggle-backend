@@ -61,7 +61,7 @@ public class OAuthService {
                 "&grant_type=" + "authorization_code", null, OAuthTokenDto.class);
 
         log.info("------------------");
-        log.info(googleUserInfo.getBody().toString());
+        log.info(googleUserInfo.getBody().getAccessToken());
 
         if(ObjectUtils.isEmpty(googleUserInfo.getBody())) {
             throw new RuntimeException();
