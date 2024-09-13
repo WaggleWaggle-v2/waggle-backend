@@ -1,16 +1,15 @@
 package unius.system_oauth.dto;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.JsonProperty;
+import lombok.Getter;
+import lombok.Setter;
 
+@Getter
+@Setter
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class GoogleInfoDto {
-    private Long sub;
 
-    public void setId(Long id) {
-        this.sub = id;
-    }
-
-    public Long getId() {
-        return this.sub;
-    }
+    @JsonProperty("sub")
+    private Long id;
 }

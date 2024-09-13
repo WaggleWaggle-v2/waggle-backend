@@ -60,10 +60,7 @@ public class OAuthService {
                 "&redirect_uri=" + GOOGLE_REDIRECT_URI +
                 "&grant_type=" + "authorization_code", null, OAuthTokenDto.class);
 
-        log.info("------------------");
-        log.info(googleUserInfo.getBody().getAccessToken());
-
-        if(ObjectUtils.isEmpty(googleUserInfo.getBody())) {
+        if(ObjectUtils.isEmpty(googleUserInfo.getBody().getAccessToken())) {
             throw new RuntimeException();
         }
 
@@ -78,7 +75,7 @@ public class OAuthService {
                 "&redirect_uri" + KAKAO_REDIRECT_URI +
                 "&grant_type=" + "authorization_code", null, OAuthTokenDto.class);
 
-        if(ObjectUtils.isEmpty(kakaoUserInfo.getBody())) {
+        if(ObjectUtils.isEmpty(kakaoUserInfo.getBody().getAccessToken())) {
             throw new RuntimeException();
         }
 
@@ -92,7 +89,7 @@ public class OAuthService {
         HttpEntity<MultiValueMap<String, String>> getUserInfo = new HttpEntity<>(httpheaders);
         ResponseEntity<GoogleInfoDto> googleUserInfo = restTemplate.exchange("https://www.googleapis.com/oauth2/v3/userinfo", HttpMethod.GET, getUserInfo, GoogleInfoDto.class);
 
-        if(ObjectUtils.isEmpty(googleUserInfo.getBody())) {
+        if(ObjectUtils.isEmpty(googleUserInfo.getBody().getId())) {
             throw new RuntimeException();
         }
 
@@ -106,7 +103,7 @@ public class OAuthService {
         HttpEntity<MultiValueMap<String, String>> getUserInfo = new HttpEntity<>(httpheaders);
         ResponseEntity<KakaoInfoDto> kakaoUserInfo = restTemplate.exchange("https://kapi.kakao.com/v1/user/access_token_info", HttpMethod.GET, getUserInfo, KakaoInfoDto.class);
 
-        if(ObjectUtils.isEmpty(kakaoUserInfo.getBody())) {
+        if(ObjectUtils.isEmpty(kakaoUserInfo.getBody().getId())) {
             throw new RuntimeException();
         }
 
