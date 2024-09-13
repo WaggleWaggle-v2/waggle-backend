@@ -88,12 +88,14 @@ public class OAuthService {
         HttpHeaders httpheaders = new HttpHeaders();
 
         log.warn("진입점");
+        log.warn(oauthToken);
 
         httpheaders.add(HttpHeaders.AUTHORIZATION, "Bearer " + oauthToken);
         HttpEntity<MultiValueMap<String, String>> getUserInfo = new HttpEntity<>(httpheaders);
         ResponseEntity<GoogleInfoDto> googleUserInfo = restTemplate.exchange("https://www.googleapis.com/oauth2/v3/userinfo", HttpMethod.GET, getUserInfo, GoogleInfoDto.class);
 
         log.info("종료점");
+        log.info(String.valueOf(googleUserInfo.getBody()));
         log.info(String.valueOf(googleUserInfo.getBody().getId()));
 
         if(ObjectUtils.isEmpty(googleUserInfo.getBody().getId())) {
