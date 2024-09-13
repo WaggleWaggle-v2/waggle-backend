@@ -11,5 +11,5 @@ import lombok.Setter;
 public class GoogleInfoDto {
 
     @JsonProperty("sub")
-    private Long id;
+    private String id;
 }
