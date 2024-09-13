@@ -24,14 +24,12 @@ public class AuthService {
 
     @Transactional
     public String googleLogin (String code) {
-        oAuthService.getGoogleAuthCode(code);
-//        String oAuthId = oAuthService.getGoogleAuthCode(code);
-//        User user = oAuthInfoService.login(oAuthId, GOOGLE);
-//
-//        GenerateTokenDto.Response token = tokenService.generateToken(user.getId(), user.getUserState());
-//
-//        return GRANT_TYPE + token.getAccessToken();
-        return "";
+        String oAuthId = oAuthService.getGoogleAuthCode(code);
+        User user = oAuthInfoService.login(oAuthId, GOOGLE);
+
+        GenerateTokenDto.Response token = tokenService.generateToken(user.getId(), user.getUserState());
+
+        return GRANT_TYPE + token.getAccessToken();
     }
 
     @Transactional

@@ -15,8 +15,6 @@ import unius.system_oauth.dto.GoogleInfoDto;
 import unius.system_oauth.dto.KakaoInfoDto;
 import unius.system_oauth.dto.OAuthTokenDto;
 
-import java.util.Map;
-
 @Slf4j
 @Service
 @RequiredArgsConstructor
@@ -42,10 +40,10 @@ public class OAuthService {
 
     private final RestTemplate restTemplate;
 
-    public void getGoogleAuthCode(String code) {
+    public String getGoogleAuthCode(String code) {
         String oauthToken = getGoogleToken(code);
 
-//        return getGoogleOAuthId(oauthToken);
+        return getGoogleOAuthId(oauthToken);
     }
 
     public String getKakaoAuthCode(String code) {
@@ -86,27 +84,27 @@ public class OAuthService {
         return kakaoUserInfo.getBody().getAccessToken();
     }
 
-    private void getGoogleOAuthId(String oauthToken) {
+    private String getGoogleOAuthId(String oauthToken) {
         HttpHeaders httpheaders = new HttpHeaders();
 
         log.warn("진입점");
-        log.warn(oauthToken);
 
-        httpheaders.add(HttpHeaders.AUTHORIZATION, "Bearer " + oauthToken);
-        HttpEntity<MultiValueMap<String, String>> getUserInfo = new HttpEntity<>(httpheaders);
+        ResponseEntity<GoogleInfoDto> googleUserInfo;
 
-        ResponseEntity<Map> googleUserInfo =  restTemplate.exchange("https://www.googleapis.com/oauth2/v3/userinfo", HttpMethod.GET, getUserInfo, Map.class);
-//        ResponseEntity<GoogleInfoDto> googleUserInfo = restTemplate.exchange("https://www.googleapis.com/oauth2/v3/userinfo", HttpMethod.GET, getUserInfo, GoogleInfoDto.class);
+        try {
+            httpheaders.add(HttpHeaders.AUTHORIZATION, "Bearer " + oauthToken);
+            HttpEntity<MultiValueMap<String, String>> getUserInfo = new HttpEntity<>(httpheaders);
+            googleUserInfo = restTemplate.exchange("https://www.googleapis.com/oauth2/v3/userinfo", HttpMethod.GET, getUserInfo, GoogleInfoDto.class);
+        } catch (Exception e) {
+            e.printStackTrace();
+            throw new RuntimeException();
+        }
 
-        log.info("종료점");
-        log.info(String.valueOf(googleUserInfo.getBody()));
-        log.info(String.valueOf(googleUserInfo.getBody().get("sub")));
+        if(ObjectUtils.isEmpty(googleUserInfo.getBody().getId())) {
+            throw new RuntimeException();
+        }
 
-//        if(ObjectUtils.isEmpty(googleUserInfo.getBody().getId())) {
-//            throw new RuntimeException();
-//        }
-//
-//        return String.valueOf(googleUserInfo.getBody().getId());
+        return String.valueOf(googleUserInfo.getBody().getId());
     }
 
     private String getKakaoOAuthId(String oauthToken) {
