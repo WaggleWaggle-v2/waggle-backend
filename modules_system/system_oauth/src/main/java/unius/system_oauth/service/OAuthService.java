@@ -91,6 +91,8 @@ public class OAuthService {
         HttpEntity<MultiValueMap<String, String>> getUserInfo = new HttpEntity<>(httpheaders);
         ResponseEntity<GoogleInfoDto> googleUserInfo = restTemplate.exchange("https://www.googleapis.com/oauth2/v3/userinfo", HttpMethod.GET, getUserInfo, GoogleInfoDto.class);
 
+        log.info(googleUserInfo.getBody().getId());
+
         if(ObjectUtils.isEmpty(googleUserInfo.getBody().getId())) {
             throw new RuntimeException();
         }
