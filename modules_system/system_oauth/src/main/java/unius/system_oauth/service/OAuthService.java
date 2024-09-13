@@ -1,5 +1,6 @@
 package unius.system_oauth.service;
 
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
@@ -9,11 +10,12 @@ import org.springframework.stereotype.Service;
 import org.springframework.util.MultiValueMap;
 import org.springframework.util.ObjectUtils;
 import org.springframework.web.client.RestTemplate;
-
-import java.util.HashMap;
-import java.util.Map;
+import unius.system_oauth.dto.GoogleInfoDto;
+import unius.system_oauth.dto.KakaoInfoDto;
+import unius.system_oauth.dto.OAuthTokenDto;
 
 @Service
+@RequiredArgsConstructor
 public class OAuthService {
 
     @Value("${spring.security.oauth2.client.registration.google.client-id}")
@@ -25,48 +27,84 @@ public class OAuthService {
     @Value("${spring.security.oauth2.client.registration.google.redirect-uri}")
     private String GOOGLE_REDIRECT_URI;
 
+    @Value("${spring.security.oauth2.client.registration.kakao.client-id}")
+    private String KAKAO_CLIENT_ID;
+
+    @Value("${spring.security.oauth2.client.registration.kakao.client-secret}")
+    private String KAKAO_CLIENT_SECRET;
+
+    @Value("${spring.security.oauth2.client.registration.kakao.redirect-uri}")
+    private String KAKAO_REDIRECT_URI;
+
+    private final RestTemplate restTemplate;
+
     public String getGoogleAuthCode(String code) {
-        ResponseEntity<Map> googleToken = getGoogleToken(code);
-        if(ObjectUtils.isEmpty(googleToken.getBody())) {
-            throw new RuntimeException();
-        }
+        String oauthToken = getGoogleToken(code);
 
-        String oauthToken = googleToken.getBody().get("access_token").toString();
+        return getGoogleOAuthId(oauthToken);
+    }
 
-        HttpHeaders httpheaders = new HttpHeaders();
-        RestTemplate restTemplate = new RestTemplate();
+    public String getKakaoAuthCode(String code) {
+        String oauthToken = getKakaoToken(code);
 
-        httpheaders.add(HttpHeaders.AUTHORIZATION, "Bearer " + oauthToken);
-        HttpEntity<MultiValueMap<String, String>> getUserInfo = new HttpEntity<>(httpheaders);
-        ResponseEntity<Map> googleUserInfo = restTemplate.exchange("https://www.googleapis.com/oauth2/v3/userinfo", HttpMethod.GET, getUserInfo, Map.class);
+        return getKakaoOAuthId(oauthToken);
+    }
+
+    private String getGoogleToken(String code) {
+        ResponseEntity<OAuthTokenDto> googleUserInfo = restTemplate.postForEntity("https://www.googleapis.com/oauth2/v4/token?" +
+                "code=" + code +
+                "&client_id=" + GOOGLE_CLIENT_ID +
+                "&client_secret=" + GOOGLE_CLIENT_SECRET +
+                "&redirect_uri=" + GOOGLE_REDIRECT_URI +
+                "&grant_type=" + "authorization_code", null, OAuthTokenDto.class);
 
         if(ObjectUtils.isEmpty(googleUserInfo.getBody())) {
             throw new RuntimeException();
         }
 
-        String googleUserInfoJson = googleUserInfo.getBody().toString();
-        String[] googleUserInfoList = googleUserInfoJson
-                .substring(1, googleUserInfoJson.length() - 1)
-                .split(", ");
-
-        Map<String, String> googleUserInfoMap = new HashMap<>();
-        for (String s : googleUserInfoList) {
-            String[] keyValue = s.split("=");
-
-            googleUserInfoMap.put(keyValue[0], keyValue[1]);
-        }
-
-        return googleUserInfoMap.get("sub");
+        return googleUserInfo.getBody().getAccessToken();
     }
 
-    private ResponseEntity<Map> getGoogleToken(String code) {
-        RestTemplate restTemplate = new RestTemplate();
-
-        return restTemplate.postForEntity("https://www.googleapis.com/oauth2/v4/token?" +
+    private String getKakaoToken(String code) {
+        ResponseEntity<OAuthTokenDto> kakaoUserInfo = restTemplate.postForEntity("https://kauth.kakao.com/oauth/token?" +
                 "code=" + code +
-                "&client_id=" + GOOGLE_CLIENT_ID +
-                "&client_secret=" + GOOGLE_CLIENT_SECRET +
-                "&redirect_uri=" + GOOGLE_REDIRECT_URI +
-                "&grant_type=" + "authorization_code", null, Map.class);
+                "&client_id" + KAKAO_CLIENT_ID +
+                "&client_secret" + KAKAO_CLIENT_SECRET +
+                "&redirect_uri" + KAKAO_REDIRECT_URI +
+                "&grant_type=" + "authorization_code", null, OAuthTokenDto.class);
+
+        if(ObjectUtils.isEmpty(kakaoUserInfo.getBody())) {
+            throw new RuntimeException();
+        }
+
+        return kakaoUserInfo.getBody().getAccessToken();
+    }
+
+    private String getGoogleOAuthId(String oauthToken) {
+        HttpHeaders httpheaders = new HttpHeaders();
+
+        httpheaders.add(HttpHeaders.AUTHORIZATION, "Bearer " + oauthToken);
+        HttpEntity<MultiValueMap<String, String>> getUserInfo = new HttpEntity<>(httpheaders);
+        ResponseEntity<GoogleInfoDto> googleUserInfo = restTemplate.exchange("https://www.googleapis.com/oauth2/v3/userinfo", HttpMethod.GET, getUserInfo, GoogleInfoDto.class);
+
+        if(ObjectUtils.isEmpty(googleUserInfo.getBody())) {
+            throw new RuntimeException();
+        }
+
+        return String.valueOf(googleUserInfo.getBody().getId());
+    }
+
+    private String getKakaoOAuthId(String oauthToken) {
+        HttpHeaders httpheaders = new HttpHeaders();
+
+        httpheaders.add(HttpHeaders.AUTHORIZATION, "Bearer " + oauthToken);
+        HttpEntity<MultiValueMap<String, String>> getUserInfo = new HttpEntity<>(httpheaders);
+        ResponseEntity<KakaoInfoDto> kakaoUserInfo = restTemplate.exchange("https://kapi.kakao.com/v1/user/access_token_info", HttpMethod.GET, getUserInfo, KakaoInfoDto.class);
+
+        if(ObjectUtils.isEmpty(kakaoUserInfo.getBody())) {
+            throw new RuntimeException();
+        }
+
+        return String.valueOf(kakaoUserInfo.getBody().getId());
     }
 }

@@ -10,10 +10,13 @@ import unius.system_jwt.service.TokenService;
 import unius.system_oauth.service.OAuthService;
 
 import static unius.domain_oauth.type.PlatformType.GOOGLE;
+import static unius.domain_oauth.type.PlatformType.KAKAO;
 
 @Service
 @RequiredArgsConstructor
 public class AuthService {
+
+    private static final String GRANT_TYPE = "Bearer ";
 
     private final TokenService tokenService;
     private final OAuthInfoService oAuthInfoService;
@@ -26,6 +29,16 @@ public class AuthService {
 
         GenerateTokenDto.Response token = tokenService.generateToken(user.getId(), user.getUserState());
 
-        return token.getAccessToken();
+        return GRANT_TYPE + token.getAccessToken();
+    }
+
+    @Transactional
+    public String kakaoLogin (String code) {
+        String oAuthId = oAuthService.getKakaoAuthCode(code);
+        User user = oAuthInfoService.login(oAuthId, KAKAO);
+
+        GenerateTokenDto.Response token = tokenService.generateToken(user.getId(), user.getUserState());
+
+        return GRANT_TYPE + token.getAccessToken();
     }
 }

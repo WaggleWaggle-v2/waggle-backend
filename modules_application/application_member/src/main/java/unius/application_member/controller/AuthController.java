@@ -14,18 +14,21 @@ import unius.application_member.service.AuthService;
 @RequiredArgsConstructor
 public class AuthController {
 
-    private static final String GRANT_TYPE = "Bearer ";
-
     private final AuthService authService;
 
     @GetMapping("/login/google")
     public ResponseEntity<Void> googleLogin(
             @RequestParam("code") String code) {
-        HttpHeaders headers = new HttpHeaders();
-        headers.add(HttpHeaders.AUTHORIZATION, GRANT_TYPE + authService.googleLogin(code));
-
         return ResponseEntity.ok()
-                .headers(headers)
+                .headers(headers -> headers.add(HttpHeaders.AUTHORIZATION, authService.googleLogin(code)))
+                .build();
+    }
+
+    @GetMapping("/login/kakao")
+    public ResponseEntity<Void> kakaoLogin(
+            @RequestParam("code") String code) {
+        return ResponseEntity.ok()
+                .headers(headers -> headers.add(HttpHeaders.AUTHORIZATION, authService.kakaoLogin(code)))
                 .build();
     }
 }

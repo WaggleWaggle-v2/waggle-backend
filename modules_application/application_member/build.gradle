@@ -54,6 +54,7 @@ dependencies {
     implementation project (":modules_system:system_exception")
     implementation project (":modules_system:system_jwt")
     implementation project (":modules_system:system_oauth")
+    implementation project (":modules_system:system_rest_template")
 }
 
 //tasks.named('test') {

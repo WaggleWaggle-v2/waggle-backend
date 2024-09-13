@@ -14,7 +14,8 @@ import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
         "unius.independent_jpa",
         "unius.system_exception",
         "unius.system_jwt",
-        "unius.system_oauth"
+        "unius.system_oauth",
+        "unius.system_rest_template"
 })
 @EnableJpaRepositories(basePackages = {
         "unius.domain_bookshelf",
