@@ -60,9 +60,6 @@ public class OAuthService {
                 "&redirect_uri=" + GOOGLE_REDIRECT_URI +
                 "&grant_type=" + "authorization_code", null, OAuthTokenDto.class);
 
-        log.info("-----");
-        log.info(googleUserInfo.getBody().getAccessToken());
-
         if(ObjectUtils.isEmpty(googleUserInfo.getBody().getAccessToken())) {
             throw new RuntimeException();
         }
@@ -91,6 +88,9 @@ public class OAuthService {
         httpheaders.add(HttpHeaders.AUTHORIZATION, "Bearer " + oauthToken);
         HttpEntity<MultiValueMap<String, String>> getUserInfo = new HttpEntity<>(httpheaders);
         ResponseEntity<GoogleInfoDto> googleUserInfo = restTemplate.exchange("https://www.googleapis.com/oauth2/v3/userinfo", HttpMethod.GET, getUserInfo, GoogleInfoDto.class);
+
+        log.info("----------");
+        log.info(String.valueOf(googleUserInfo.getBody().getId()));
 
         if(ObjectUtils.isEmpty(googleUserInfo.getBody().getId())) {
             throw new RuntimeException();
