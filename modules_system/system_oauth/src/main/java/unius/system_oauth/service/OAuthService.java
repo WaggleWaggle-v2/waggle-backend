@@ -1,6 +1,7 @@
 package unius.system_oauth.service;
 
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
@@ -14,6 +15,7 @@ import unius.system_oauth.dto.GoogleInfoDto;
 import unius.system_oauth.dto.KakaoInfoDto;
 import unius.system_oauth.dto.OAuthTokenDto;
 
+@Slf4j
 @Service
 @RequiredArgsConstructor
 public class OAuthService {
@@ -57,6 +59,9 @@ public class OAuthService {
                 "&client_secret=" + GOOGLE_CLIENT_SECRET +
                 "&redirect_uri=" + GOOGLE_REDIRECT_URI +
                 "&grant_type=" + "authorization_code", null, OAuthTokenDto.class);
+
+        log.info("------------------");
+        log.info(googleUserInfo.getBody().toString());
 
         if(ObjectUtils.isEmpty(googleUserInfo.getBody())) {
             throw new RuntimeException();
