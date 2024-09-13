@@ -6,6 +6,10 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 public class GoogleInfoDto {
     private Long sub;
 
+    public void setId(Long id) {
+        this.sub = id;
+    }
+
     public Long getId() {
         return this.sub;
     }

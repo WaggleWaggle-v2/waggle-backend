@@ -6,6 +6,10 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 public class OAuthTokenDto {
     private String access_token;
 
+    public void setAccessToken(String accessToken) {
+        this.access_token = accessToken;
+    }
+
     public String getAccessToken() {
         return this.access_token;
     }
