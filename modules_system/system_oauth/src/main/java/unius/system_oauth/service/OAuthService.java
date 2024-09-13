@@ -60,6 +60,9 @@ public class OAuthService {
                 "&redirect_uri=" + GOOGLE_REDIRECT_URI +
                 "&grant_type=" + "authorization_code", null, OAuthTokenDto.class);
 
+        log.info("-----");
+        log.info(googleUserInfo.getBody().getAccessToken());
+
         if(ObjectUtils.isEmpty(googleUserInfo.getBody().getAccessToken())) {
             throw new RuntimeException();
         }
