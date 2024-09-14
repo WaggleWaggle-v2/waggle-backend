@@ -70,12 +70,22 @@ public class OAuthService {
     private String getKakaoToken(String code) {
         log.info(KAKAO_CLIENT_ID);
 
-        ResponseEntity<OAuthTokenDto> kakaoUserInfo = restTemplate.postForEntity("https://kauth.kakao.com/oauth/token?" +
-                "code=" + code +
-                "&client_id" + KAKAO_CLIENT_ID +
-                "&client_secret" + KAKAO_CLIENT_SECRET +
-                "&redirect_uri" + KAKAO_REDIRECT_URI +
-                "&grant_type=" + "authorization_code", null, OAuthTokenDto.class);
+        ResponseEntity<OAuthTokenDto> kakaoUserInfo;
+
+        try {
+            kakaoUserInfo = restTemplate.postForEntity("https://kauth.kakao.com/oauth/token?" +
+                    "code=" + code +
+                    "&client_id" + KAKAO_CLIENT_ID +
+                    "&client_secret" + KAKAO_CLIENT_SECRET +
+                    "&redirect_uri" + KAKAO_REDIRECT_URI +
+                    "&grant_type=" + "authorization_code", null, OAuthTokenDto.class);
+        } catch (Exception e) {
+            e.printStackTrace();
+            throw new RuntimeException();
+        }
+
+
+        log.info(kakaoUserInfo.getBody().getAccessToken());
 
         if(ObjectUtils.isEmpty(kakaoUserInfo.getBody().getAccessToken())) {
             throw new RuntimeException();
