@@ -68,6 +68,8 @@ public class OAuthService {
     }
 
     private String getKakaoToken(String code) {
+        log.info(KAKAO_CLIENT_ID);
+
         ResponseEntity<OAuthTokenDto> kakaoUserInfo = restTemplate.postForEntity("https://kauth.kakao.com/oauth/token?" +
                 "code=" + code +
                 "&client_id" + KAKAO_CLIENT_ID +
