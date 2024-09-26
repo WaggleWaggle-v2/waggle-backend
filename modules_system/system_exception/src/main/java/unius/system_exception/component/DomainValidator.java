@@ -35,6 +35,10 @@ public class DomainValidator<T> {
         return validatedDomain;
     }
 
+    public void execute() {
+        reset();
+    }
+
     private void reset() {
         this.domain.remove();
     }

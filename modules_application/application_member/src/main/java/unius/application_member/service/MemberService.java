@@ -74,7 +74,7 @@ public class MemberService {
 
         bookshelfValidator.of(bookshelfService.get(userId))
                 .validate(Objects::isNull, ALREADY_EXIST_BOOKSHELF)
-                .getOrThrow();
+                .execute();
 
         userService.setUserState(user, VERIFIED);
         bookshelfService.create(user, request.getNickname(), request.getIsOpen());
@@ -82,12 +82,13 @@ public class MemberService {
 
     @Transactional
     public SetUserNicknameDto.Response setUserNickname(String userId, SetUserNicknameDto.Request request) {
-        userValidator.of(userService.get(userId, VERIFIED))
+        User user = userValidator.of(userService.get(userId, VERIFIED))
                 .validate(Objects::nonNull, INVALID_USER)
                 .getOrThrow();
 
         Bookshelf bookshelf = bookshelfValidator.of(bookshelfService.get(userId, ACTIVE))
                 .validate(Objects::nonNull, INVALID_BOOKSHELF)
+                .validate(bs -> bs.getUser().equals(user), HAVE_NO_PERMISSION)
                 .getOrThrow();
 
         String nickname = bookshelfService.setNickname(bookshelf, request.getNickname());
@@ -97,12 +98,13 @@ public class MemberService {
 
     @Transactional
     public void setBookshelfRevelation(String userId, SetBookshelfRevelationDto.Request request) {
-        userValidator.of(userService.get(userId, VERIFIED))
+        User user = userValidator.of(userService.get(userId, VERIFIED))
                 .validate(Objects::nonNull, INVALID_USER)
                 .getOrThrow();
 
         Bookshelf bookshelf = bookshelfValidator.of(bookshelfService.get(userId, ACTIVE))
                 .validate(Objects::nonNull, INVALID_BOOKSHELF)
+                .validate(bs -> bs.getUser().equals(user), HAVE_NO_PERMISSION)
                 .getOrThrow();
 
         bookshelfService.setIsOpen(bookshelf, request.getIsOpen());
@@ -110,12 +112,13 @@ public class MemberService {
 
     @Transactional
     public void setBookshelfBackground(String userId, SetBookshelfBackgroundDto.Request request) {
-        userValidator.of(userService.get(userId, VERIFIED))
+        User user = userValidator.of(userService.get(userId, VERIFIED))
                 .validate(Objects::nonNull, INVALID_USER)
                 .getOrThrow();
 
         Bookshelf bookshelf = bookshelfValidator.of(bookshelfService.get(userId, ACTIVE))
                 .validate(Objects::nonNull, INVALID_BOOKSHELF)
+                .validate(bs -> bs.getUser().equals(user), HAVE_NO_PERMISSION)
                 .getOrThrow();
 
         bookshelfService.setProfileImage(bookshelf, request.getNumber());
@@ -123,12 +126,13 @@ public class MemberService {
 
     @Transactional
     public void setBookshelfTheme(String userId, SetBookshelfThemeDto.Request request) {
-        userValidator.of(userService.get(userId, VERIFIED))
+        User user = userValidator.of(userService.get(userId, VERIFIED))
                 .validate(Objects::nonNull, INVALID_USER)
                 .getOrThrow();
 
         Bookshelf bookshelf = bookshelfValidator.of(bookshelfService.get(userId, ACTIVE))
                 .validate(Objects::nonNull, INVALID_BOOKSHELF)
+                .validate(bs -> bs.getUser().equals(user), HAVE_NO_PERMISSION)
                 .getOrThrow();
 
         try {
@@ -141,12 +145,13 @@ public class MemberService {
 
     @Transactional
     public void setBookshelfIntroduction(String userId, SetBookshelfIntroductionDto.Request request) {
-        userValidator.of(userService.get(userId, VERIFIED))
+        User user = userValidator.of(userService.get(userId, VERIFIED))
                 .validate(Objects::nonNull, INVALID_USER)
                 .getOrThrow();
 
         Bookshelf bookshelf = bookshelfValidator.of(bookshelfService.get(userId, ACTIVE))
                 .validate(Objects::nonNull, INVALID_BOOKSHELF)
+                .validate(bs -> bs.getUser().equals(user), HAVE_NO_PERMISSION)
                 .getOrThrow();
 
         bookshelfService.setIntroduction(bookshelf, request.getIntroduction());
