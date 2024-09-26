@@ -3,15 +3,23 @@ package unius.application_member.service;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 import unius.application_member.dto.*;
+import unius.application_member.mapper.CreateBookMapper;
 import unius.application_member.mapper.GetBookshelfInfoMapper;
 import unius.application_member.mapper.GetMyUserInfoMapper;
 import unius.application_member.mapper.GetRandomBookshelfInfoMapper;
+import unius.domain_book.domain.Book;
+import unius.domain_book.service.BookService;
+import unius.domain_book_list.service.BookListService;
 import unius.domain_bookshelf.domain.Bookshelf;
 import unius.domain_bookshelf.service.BookshelfService;
 import unius.domain_bookshelf.type.BookshelfType;
 import unius.domain_user.domain.User;
 import unius.domain_user.service.UserService;
+import unius.independent_s3.service.S3Service;
+import unius.schema.bookCounter.BookCounter;
+import unius.system_book_counter.component.BookCounterProducer;
 import unius.system_exception.component.DomainValidator;
 import unius.system_exception.exception.WaggleException;
 
@@ -31,7 +39,13 @@ public class MemberService {
     private final DomainValidator<Bookshelf> bookshelfValidator;
 
     private final UserService userService;
+    private final BookService bookService;
+    private final BookListService bookListService;
     private final BookshelfService bookshelfService;
+    private final S3Service s3Service;
+
+    private static final String BOOK_DOMAIN = "book";
+    private final BookCounterProducer bookCounterProducer;
 
     public GetMyUserInfoDto.Response getMyUserInfo(String userId) {
         User user = userValidator.of(userService.get(userId, VERIFIED, INCOMPLETE))
@@ -164,5 +178,24 @@ public class MemberService {
         List<Bookshelf> bookshelfList = bookshelfService.getRandom();
 
         return GetRandomBookshelfInfoMapper.INSTANCE.toDtoList(bookshelfList);
+    }
+
+    @Transactional
+    public CreateBookDto.Response createBook(String userId, MultipartFile bookImage, CreateBookDto.Request request) {
+        User user = userValidator.of(userService.get(userId, VERIFIED))
+                .validate(Objects::nonNull, INVALID_USER)
+                .getOrThrow();
+
+        Bookshelf targetBookshelf = bookshelfValidator.of(bookshelfService.get(request.getBookshelfId(), ACTIVE))
+                .validate(Objects::nonNull, INVALID_BOOKSHELF)
+                .validate(bs -> bs.isOpen() || bs.getUser().equals(user), HAVE_NO_PERMISSION)
+                .getOrThrow();
+
+        String bookImageUrl = s3Service.uploadFile(bookImage, BOOK_DOMAIN);
+        Book book = bookService.create(targetBookshelf, request.getNickname(), request.getTitle(), request.getDescription(), bookImageUrl, request.isOpen(), request.getBookType());
+        bookListService.create(user, book);
+        bookCounterProducer.sendMessage("book_counter", new BookCounter(targetBookshelf.getId(), 1L));
+
+        return CreateBookMapper.INSTANCE.toDto(book, targetBookshelf.getId());
     }
 }

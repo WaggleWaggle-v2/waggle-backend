@@ -1,0 +1,15 @@
+{
+  "type": "record",
+  "name": "BookCounter",
+  "namespace": "unius.schema.bookCounter",
+  "fields": [
+    {
+      "name": "bookshelfId",
+      "type": "string"
+    },
+    {
+      "name": "additionValue",
+      "type": "long"
+    }
+  ]
+}

@@ -12,6 +12,7 @@ include('modules_application:application_member')
  * [CORE] *
  * ====== */
 include('modules_core')
+include('modules_core:core_enum')
 include('modules_core:core_user')
 include('modules_core:core_uuid')
 
@@ -19,6 +20,8 @@ include('modules_core:core_uuid')
  * [DOMAIN] *
  * ======== */
 include('modules_domain')
+include('modules_domain:domain_book')
+include('modules_domain:domain_book_list')
 include('modules_domain:domain_bookshelf')
 include('modules_domain:domain_user')
 include('modules_domain:domain_oauth')
@@ -27,13 +30,15 @@ include('modules_domain:domain_oauth')
  * [INDEPENDENT] *
  * ============= */
 include('modules_independent')
-include('modules_independent:independent_s3')
 include('modules_independent:independent_jpa')
+include('modules_independent:independent_kafka')
+include('modules_independent:independent_s3')
 
 /* ======== *
  * [SYSTEM] *
  * ======== */
 include('modules_system')
+include('modules_system:system_book_counter')
 include('modules_system:system_exception')
 include('modules_system:system_jwt')
 include('modules_system:system_oauth')

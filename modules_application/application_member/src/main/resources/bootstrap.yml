@@ -3,6 +3,7 @@ spring:
     active:
       - jwt
       - jpa-${BOOT_ENV}
+      - kafka-${BOOT_ENV}
       - oauth
       - s3
   cloud:

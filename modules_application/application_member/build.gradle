@@ -15,6 +15,9 @@ java {
 
 repositories {
     mavenCentral()
+    maven {
+        url 'https://packages.confluent.io/maven/'
+    }
 }
 
 dependencyManagement {
@@ -30,6 +33,11 @@ dependencies {
     implementation 'org.springframework.cloud:spring-cloud-starter-config'
     implementation 'org.springframework.cloud:spring-cloud-starter-bootstrap'
 
+    implementation 'org.springframework.kafka:spring-kafka'
+    implementation 'org.apache.kafka:kafka-clients'
+    implementation 'io.confluent:kafka-avro-serializer:7.2.1'
+    implementation 'io.confluent:kafka-schema-registry-client:7.2.1'
+
     implementation 'jakarta.validation:jakarta.validation-api:3.0.2'
     implementation 'org.hibernate.validator:hibernate-validator:8.0.0.Final'
 
@@ -44,13 +52,17 @@ dependencies {
 
     implementation project (":modules_core:core_user")
 
+    implementation project (":modules_domain:domain_book")
+    implementation project (":modules_domain:domain_book_list")
     implementation project (":modules_domain:domain_bookshelf")
     implementation project (":modules_domain:domain_user")
     implementation project (":modules_domain:domain_oauth")
 
-    implementation project (":modules_independent:independent_s3")
     implementation project (":modules_independent:independent_jpa")
+    implementation project (":modules_independent:independent_kafka")
+    implementation project (":modules_independent:independent_s3")
 
+    implementation project (":modules_system:system_book_counter")
     implementation project (":modules_system:system_exception")
     implementation project (":modules_system:system_jwt")
     implementation project (":modules_system:system_oauth")

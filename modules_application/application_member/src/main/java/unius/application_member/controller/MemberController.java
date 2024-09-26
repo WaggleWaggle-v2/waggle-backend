@@ -5,6 +5,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 import unius.application_member.dto.*;
 import unius.application_member.service.MemberService;
 
@@ -80,5 +81,13 @@ public class MemberController {
     @GetMapping("/bookshelf/get/random")
     public ResponseEntity<List<GetRandomBookshelfInfoDto.Response>> getRandomBookshelfInfo() {
         return ResponseEntity.ok(memberService.getRandomBookshelfInfo());
+    }
+
+    @PostMapping("/book/create")
+    public ResponseEntity<?> createBook(
+            @RequestHeader("X-User-Id-Header") String id,
+            @RequestPart MultipartFile bookImage,
+            @RequestPart @Valid CreateBookDto.Request request) {
+        return ResponseEntity.ok(memberService.createBook(id, bookImage, request));
     }
 }

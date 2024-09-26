@@ -5,6 +5,7 @@ import com.amazonaws.services.s3.model.ObjectMetadata;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
+import org.springframework.util.ObjectUtils;
 import org.springframework.web.multipart.MultipartFile;
 import unius.core_uuid.util.UuidUtils;
 
@@ -18,8 +19,8 @@ public class S3Service {
 
     private final AmazonS3Client amazonS3Client;
 
-    public String uploadFile(MultipartFile file, String domain, String subDomain, String extension) {
-        String fileUrl = bucket + "/" + domain + "/" + subDomain + "/" + UuidUtils.generateUuid() + "." + extension;
+    public String uploadFile(MultipartFile file, String domain) {
+        String fileUrl = bucket + "/" + domain + "/" + UuidUtils.generateUuid() + "." + getExtension(file);
 
         ObjectMetadata metadata = new ObjectMetadata();
         metadata.setContentType(file.getContentType());
@@ -32,5 +33,16 @@ public class S3Service {
         }
 
         return amazonS3Client.getUrl(bucket, fileUrl).toString();
+    }
+
+    private String getExtension(MultipartFile file) {
+        String fileName = file.getOriginalFilename();
+        if(ObjectUtils.isEmpty(fileName)) {
+            // TODO Exception 지정
+
+            throw new RuntimeException();
+        }
+
+        return file.getOriginalFilename().substring(file.getOriginalFilename().lastIndexOf("."));
     }
 }

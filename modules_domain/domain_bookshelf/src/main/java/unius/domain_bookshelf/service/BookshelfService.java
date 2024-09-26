@@ -68,4 +68,8 @@ public class BookshelfService {
     public void setIntroduction(Bookshelf bookshelf, String introduction) {
         bookshelfRepositoryQuerydsl.setIntroduction(bookshelf, introduction);
     }
+
+    public void updateBookCounter(String bookshelfId, Long additionValue) {
+        bookshelfRepositoryQuerydsl.updateBookCounter(bookshelfId, additionValue);
+    }
 }

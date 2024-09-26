@@ -103,4 +103,14 @@ public class BookshelfRepositoryQuerydsl {
                 .where(condition)
                 .execute();
     }
+
+    public void updateBookCounter(String bookshelfId, Long additionValue) {
+        BooleanExpression condition = bookshelf.id.eq(bookshelfId)
+                .and(bookshelf.bookshelfState.eq(ACTIVE));
+
+        jpaQueryFactory.update(bookshelf)
+                .set(bookshelf.count, bookshelf.count.add(additionValue))
+                .where(condition)
+                .execute();
+    }
 }
