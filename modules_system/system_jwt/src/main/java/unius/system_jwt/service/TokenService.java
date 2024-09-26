@@ -57,8 +57,8 @@ public class TokenService {
 
         System.out.println(claims.get(KEY_STATE.getDescription()));
 
-        if(claims.get(KEY_STATE.getDescription()) != "VERIFIED" &&
-           claims.get(KEY_STATE.getDescription()) != "INCOMPLETE") return false;
+        if(!claims.get(KEY_STATE.getDescription()).equals("VERIFIED") &&
+           !claims.get(KEY_STATE.getDescription()).equals("INCOMPLETE")) return false;
 
         return claims.getExpiration().after(new Date());
     }

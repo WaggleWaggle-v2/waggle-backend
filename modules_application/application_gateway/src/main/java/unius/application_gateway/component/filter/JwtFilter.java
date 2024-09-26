@@ -26,10 +26,11 @@ public class JwtFilter extends AbstractGatewayFilterFactory<JwtFilter.Config> {
                 return chain.filter(exchange);
             }
 
-            if(exchange.getRequest().getPath().toString().startsWith("/unius/member/bookshelf/get")) {
+            if(exchange.getRequest().getPath().toString().startsWith("/unius/member/bookshelf/get") ||
+               exchange.getRequest().getPath().toString().startsWith("/unius/member/book/create")) {
                 String token = exchange.getRequest().getHeaders().getFirst("Authorization");
 
-                if(tokenService.validateToken(token)){
+                if(!tokenService.validateToken(token)){
                     return chain.filter(exchange);
                 } else {
                     ServerHttpRequest request = exchange.getRequest().mutate()
@@ -42,7 +43,7 @@ public class JwtFilter extends AbstractGatewayFilterFactory<JwtFilter.Config> {
 
             String token = exchange.getRequest().getHeaders().getFirst("Authorization");
 
-            if(tokenService.validateToken(token)){
+            if(!tokenService.validateToken(token)){
                 exchange.getResponse().setStatusCode(HttpStatus.UNAUTHORIZED);
                 return exchange.getResponse().setComplete();
             }
