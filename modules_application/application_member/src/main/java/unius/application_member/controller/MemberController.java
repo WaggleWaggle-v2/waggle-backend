@@ -85,7 +85,7 @@ public class MemberController {
 
     @PostMapping("/book/create")
     public ResponseEntity<?> createBook(
-            @RequestHeader("X-User-Id-Header") String id,
+            @RequestHeader(value = "X-User-Id-Header", required = false) String id,
             @RequestPart MultipartFile bookImage,
             @RequestPart @Valid CreateBookDto.Request request) {
         return ResponseEntity.ok(memberService.createBook(id, bookImage, request));

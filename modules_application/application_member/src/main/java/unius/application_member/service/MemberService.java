@@ -182,18 +182,34 @@ public class MemberService {
 
     @Transactional
     public CreateBookDto.Response createBook(String userId, MultipartFile bookImage, CreateBookDto.Request request) {
-        User user = userValidator.of(userService.get(userId, VERIFIED))
-                .validate(Objects::nonNull, INVALID_USER)
-                .getOrThrow();
+        User user;
+        Bookshelf targetBookshelf;
+        boolean isMember = !(userId == null || userId.isEmpty());
 
-        Bookshelf targetBookshelf = bookshelfValidator.of(bookshelfService.get(request.getBookshelfId(), ACTIVE))
-                .validate(Objects::nonNull, INVALID_BOOKSHELF)
-                .validate(bs -> bs.isOpen() || bs.getUser().equals(user), HAVE_NO_PERMISSION)
-                .getOrThrow();
+        if(!isMember) {
+            user = null;
+            targetBookshelf = bookshelfValidator.of(bookshelfService.get(request.getBookshelfId(), ACTIVE))
+                    .validate(Objects::nonNull, INVALID_BOOKSHELF)
+                    .validate(Bookshelf::isOpen, HAVE_NO_PERMISSION)
+                    .getOrThrow();
+        } else {
+            user = userValidator.of(userService.get(userId, VERIFIED))
+                    .validate(Objects::nonNull, INVALID_USER)
+                    .getOrThrow();
+
+            targetBookshelf = bookshelfValidator.of(bookshelfService.get(request.getBookshelfId(), ACTIVE))
+                    .validate(Objects::nonNull, INVALID_BOOKSHELF)
+                    .validate(bs -> bs.isOpen() || bs.getUser().equals(user), HAVE_NO_PERMISSION)
+                    .getOrThrow();
+        }
 
         String bookImageUrl = s3Service.uploadFile(bookImage, BOOK_DOMAIN);
         Book book = bookService.create(targetBookshelf, request.getNickname(), request.getTitle(), request.getDescription(), bookImageUrl, request.isOpen(), request.getBookType());
-        bookListService.create(user, book);
+
+        if(isMember && user != null) {
+            bookListService.create(user, book);
+        }
+
         bookCounterProducer.sendMessage("book_counter", new BookCounter(targetBookshelf.getId(), 1L));
 
         return CreateBookMapper.INSTANCE.toDto(book, targetBookshelf.getId());
