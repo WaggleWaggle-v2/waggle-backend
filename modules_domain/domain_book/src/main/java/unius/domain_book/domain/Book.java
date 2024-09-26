@@ -30,9 +30,6 @@ public class Book extends AuditingModel {
     @Column(nullable = false)
     private String nickname;
 
-    @Column(nullable = false)
-    private String title;
-
     private String description;
 
     private String bookImageUrl;

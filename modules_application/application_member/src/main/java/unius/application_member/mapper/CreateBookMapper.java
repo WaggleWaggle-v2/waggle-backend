@@ -11,5 +11,5 @@ public interface CreateBookMapper {
     CreateBookMapper INSTANCE = Mappers.getMapper(CreateBookMapper.class);
 
     @Mapping(target = "bookType", expression = "java(book.getBookType().getDescription())")
-    CreateBookDto.Response toDto(Book book, String bookshelfId);
+    CreateBookDto.Response toDto(Book book, String bookshelfId, String bookImageUrl);
 }

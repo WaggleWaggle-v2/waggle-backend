@@ -209,7 +209,7 @@ public class MemberService {
         }
 
         String bookImageUrl = s3Service.uploadFile(bookImage, BOOK_DOMAIN);
-        Book book = bookService.create(targetBookshelf, request.getNickname(), request.getTitle(), request.getDescription(), bookImageUrl, request.isOpen(), request.getBookType());
+        Book book = bookService.create(targetBookshelf, request.getNickname(), request.getDescription(), bookImageUrl, request.isOpen(), request.getBookType());
 
         if(isMember && user != null) {
             bookListService.create(user, book);
@@ -217,6 +217,6 @@ public class MemberService {
 
         bookCounterProducer.sendMessage("book_counter", new BookCounter(targetBookshelf.getId(), 1L));
 
-        return CreateBookMapper.INSTANCE.toDto(book, targetBookshelf.getId());
+        return CreateBookMapper.INSTANCE.toDto(book, targetBookshelf.getId(), bookImageUrl);
     }
 }

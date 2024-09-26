@@ -21,10 +21,6 @@ public abstract class CreateBookDto {
         private final String nickname;
 
         @NotNull
-        @NotBlank
-        private final String title;
-
-        @NotNull
         private final String description;
 
         @NotNull
@@ -41,9 +37,9 @@ public abstract class CreateBookDto {
     public static class Response {
         private String bookshelfId;
         private String nickname;
-        private String title;
         private String description;
         private boolean isOpen;
+        private String bookImageUrl;
         private String bookType;
     }
 }

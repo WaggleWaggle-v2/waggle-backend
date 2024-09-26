@@ -19,7 +19,6 @@ public class BookService {
     public Book create(
             Bookshelf bookshelf,
             String nickname,
-            String title,
             String description,
             String bookImageUrl,
             boolean isOpen,
@@ -28,7 +27,6 @@ public class BookService {
         Book book = Book.builder()
                 .bookshelf(bookshelf)
                 .nickname(nickname)
-                .title(title)
                 .description(description)
                 .bookImageUrl(bookImageUrl)
                 .isOpen(isOpen)
