@@ -20,7 +20,7 @@ public class S3Service {
     private final AmazonS3Client amazonS3Client;
 
     public String uploadFile(MultipartFile file, String domain) {
-        String fileUrl = bucket + "/" + domain + "/" + UuidUtils.generateUuid() + "." + getExtension(file);
+        String fileUrl = bucket + "/" + domain + "/" + UuidUtils.generateUuid() + getExtension(file);
 
         ObjectMetadata metadata = new ObjectMetadata();
         metadata.setContentType(file.getContentType());
