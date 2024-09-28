@@ -5,8 +5,12 @@ import org.springframework.stereotype.Service;
 import unius.core_enum.util.EnumUtils;
 import unius.domain_book.domain.Book;
 import unius.domain_book.repository.BookRepository;
+import unius.domain_book.repository.BookRepositoryQuerydsl;
 import unius.domain_book.type.BookType;
 import unius.domain_bookshelf.domain.Bookshelf;
+import unius.domain_user.domain.User;
+
+import java.util.List;
 
 import static unius.domain_book.type.BookState.ACTIVE;
 
@@ -15,6 +19,7 @@ import static unius.domain_book.type.BookState.ACTIVE;
 public class BookService {
 
     private final BookRepository bookRepository;
+    private final BookRepositoryQuerydsl bookRepositoryQuerydsl;
 
     public Book create(
             Bookshelf bookshelf,
@@ -37,5 +42,9 @@ public class BookService {
         bookRepository.saveAndFlush(book);
 
         return book;
+    }
+
+    public List<Book> getBookshelfBookList(User user, Bookshelf bookshelf, Long cursorId) {
+        return bookRepositoryQuerydsl.getBookshelfBookList(user, bookshelf, cursorId);
     }
 }

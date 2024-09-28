@@ -5,10 +5,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 import unius.application_member.dto.*;
-import unius.application_member.mapper.CreateBookMapper;
-import unius.application_member.mapper.GetBookshelfInfoMapper;
-import unius.application_member.mapper.GetMyUserInfoMapper;
-import unius.application_member.mapper.GetRandomBookshelfInfoMapper;
+import unius.application_member.mapper.*;
 import unius.domain_book.domain.Book;
 import unius.domain_book.service.BookService;
 import unius.domain_book_list.service.BookListService;
@@ -218,5 +215,33 @@ public class MemberService {
         bookCounterProducer.sendMessage("book_counter", new BookCounter(targetBookshelf.getId(), 1L));
 
         return CreateBookMapper.INSTANCE.toDto(book, targetBookshelf.getId(), bookImageUrl);
+    }
+
+    public List<GetBookshelfBookListDto.Response> getBookshelfBookList(String userId, String uuid, Long cursorId) {
+        boolean isMember = !(userId == null || userId.isEmpty());
+
+        User user;
+        Bookshelf targetBookshelf;
+
+        if(!isMember) {
+            user = null;
+            targetBookshelf = bookshelfValidator.of(bookshelfService.get(uuid, ACTIVE))
+                    .validate(Objects::nonNull, INVALID_BOOKSHELF)
+                    .validate(Bookshelf::isOpen, HAVE_NO_PERMISSION)
+                    .getOrThrow();
+        } else {
+            user = userValidator.of(userService.get(userId, VERIFIED))
+                    .validate(Objects::nonNull, INVALID_USER)
+                    .getOrThrow();
+
+            targetBookshelf = bookshelfValidator.of(bookshelfService.get(uuid, ACTIVE))
+                    .validate(Objects::nonNull, INVALID_BOOKSHELF)
+                    .validate(bs -> bs.getUser().equals(user) || bs.isOpen(), HAVE_NO_PERMISSION)
+                    .getOrThrow();
+        }
+
+        List<Book> bookList = bookService.getBookshelfBookList(user, targetBookshelf, cursorId);
+
+        return GetBookshelfBookListMapper.INSTANCE.toDtoList(bookList);
     }
 }

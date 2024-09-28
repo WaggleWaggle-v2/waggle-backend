@@ -90,4 +90,12 @@ public class MemberController {
             @RequestPart @Valid CreateBookDto.Request request) {
         return ResponseEntity.ok(memberService.createBook(id, bookImage, request));
     }
+
+    @GetMapping("/book/get")
+    public ResponseEntity<List<GetBookshelfBookListDto.Response>> getBookshelfBookList(
+            @RequestHeader(value = "X-User-Id-Header", required = false) String id,
+            @RequestParam String uuid,
+            @RequestParam(required = false) Long cursorId) {
+        return ResponseEntity.ok(memberService.getBookshelfBookList(id, uuid, cursorId));
+    }
 }
