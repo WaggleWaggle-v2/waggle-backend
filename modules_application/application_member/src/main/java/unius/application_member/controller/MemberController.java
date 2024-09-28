@@ -98,4 +98,12 @@ public class MemberController {
             @RequestParam(required = false) Long cursorId) {
         return ResponseEntity.ok(memberService.getBookshelfBookList(id, uuid, cursorId));
     }
+
+    @GetMapping("/mybook/send")
+    public ResponseEntity<List<GetMySendBookDto.Response>> getMySendBook(
+            @RequestHeader("X-User-Id-Header") String id,
+            @RequestParam(required = false) Long cursorId,
+            @RequestParam String order) {
+        return ResponseEntity.ok(memberService.getMySendBookList(id, cursorId, order));
+    }
 }

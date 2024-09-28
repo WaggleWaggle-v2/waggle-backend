@@ -8,6 +8,7 @@ import unius.application_member.dto.*;
 import unius.application_member.mapper.*;
 import unius.domain_book.domain.Book;
 import unius.domain_book.service.BookService;
+import unius.domain_book_list.domain.BookList;
 import unius.domain_book_list.service.BookListService;
 import unius.domain_bookshelf.domain.Bookshelf;
 import unius.domain_bookshelf.service.BookshelfService;
@@ -42,6 +43,9 @@ public class MemberService {
     private final S3Service s3Service;
 
     private static final String BOOK_DOMAIN = "book";
+    private static final String ORDER_ASC = "asc";
+    private static final String ORDER_DESC = "desc";
+
     private final BookCounterProducer bookCounterProducer;
 
     public GetMyUserInfoDto.Response getMyUserInfo(String userId) {
@@ -243,5 +247,23 @@ public class MemberService {
         List<Book> bookList = bookService.getBookshelfBookList(user, targetBookshelf, cursorId);
 
         return GetBookshelfBookListMapper.INSTANCE.toDtoList(bookList);
+    }
+
+    public List<GetMySendBookDto.Response> getMySendBookList(String userId, Long cursorId, String order) {
+        if(!order.equals(ORDER_ASC) && !order.equals(ORDER_DESC)) {
+            throw new WaggleException(MISMATCH_ARGUMENT);
+        }
+
+        User user = userValidator.of(userService.get(userId, VERIFIED))
+                .validate(Objects::nonNull, INVALID_USER)
+                .getOrThrow();
+
+        List<BookList> bookLists = bookListService.getMySendBookList(user, cursorId, order);
+
+        if(bookLists == null) {
+            return null;
+        } else {
+            return GetMySendBookListMapper.INSTANCE.toDtoList(bookLists);
+        }
     }
 }
