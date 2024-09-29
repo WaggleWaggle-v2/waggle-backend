@@ -266,4 +266,26 @@ public class MemberService {
             return GetMySendBookListMapper.INSTANCE.toDtoList(bookLists);
         }
     }
+
+    public List<GetMyReceiveBookDto.Response> getMyReceiveBookList(String userId, Long cursorId, String order) {
+        if(!order.equals(ORDER_ASC) && !order.equals(ORDER_DESC)) {
+            throw new WaggleException(MISMATCH_ARGUMENT);
+        }
+
+        userValidator.of(userService.get(userId, VERIFIED))
+                .validate(Objects::nonNull, INVALID_USER)
+                .execute();
+
+        Bookshelf bookshelf = bookshelfValidator.of(bookshelfService.get(userId, ACTIVE))
+                .validate(Objects::nonNull, INVALID_BOOKSHELF)
+                .getOrThrow();
+
+        List<Book> bookList = bookService.getMyReceiveBookList(bookshelf, cursorId, order);
+
+        if(bookList == null) {
+            return null;
+        } else {
+            return GetMyReceiveBookListMapper.INSTANCE.toDtoList(bookList);
+        }
+    }
 }

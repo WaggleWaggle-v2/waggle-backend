@@ -47,4 +47,8 @@ public class BookService {
     public List<Book> getBookshelfBookList(User user, Bookshelf bookshelf, Long cursorId) {
         return bookRepositoryQuerydsl.getBookshelfBookList(user, bookshelf, cursorId);
     }
+
+    public List<Book> getMyReceiveBookList(Bookshelf bookshelf, Long cursorId, String order) {
+        return bookRepositoryQuerydsl.getMyReceiveBookList(bookshelf, cursorId, order);
+    }
 }

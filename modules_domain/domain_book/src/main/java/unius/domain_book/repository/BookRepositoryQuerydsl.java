@@ -44,4 +44,37 @@ public class BookRepositoryQuerydsl {
                 .limit(20)
                 .fetch();
     }
+
+    public List<Book> getMyReceiveBookList(Bookshelf currentBookshelf, Long cursorId, String order) {
+        BooleanExpression baseCondition = book.bookshelf.eq(currentBookshelf);
+        BooleanExpression cursorCondition;
+
+        switch (order.toLowerCase()) {
+            case "asc" -> {
+                cursorCondition = cursorId == null ? null : book.id.gt(cursorId);
+
+                BooleanExpression condition = baseCondition.and(cursorCondition);
+
+                return jpaQueryFactory.selectFrom(book)
+                        .where(condition)
+                        .orderBy(book.id.asc())
+                        .limit(10)
+                        .fetch();
+            }
+            case "desc" -> {
+                cursorCondition = cursorId == null ? null : book.id.lt(cursorId);
+
+                BooleanExpression condition = baseCondition.and(cursorCondition);
+
+                return jpaQueryFactory.selectFrom(book)
+                        .where(condition)
+                        .orderBy(book.id.desc())
+                        .limit(10)
+                        .fetch();
+            }
+            default -> {
+                return null;
+            }
+        }
+    }
 }
