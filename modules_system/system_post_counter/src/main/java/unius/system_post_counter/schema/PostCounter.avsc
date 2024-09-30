@@ -1,0 +1,15 @@
+{
+  "type": "record",
+  "name": "PostCounter",
+  "namespace": "unius.schema.postCounter",
+  "fields": [
+    {
+      "name": "userId",
+      "type": "string"
+    },
+    {
+      "name": "additionValue",
+      "type": "long"
+    }
+  ]
+}

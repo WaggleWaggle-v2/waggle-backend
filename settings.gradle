@@ -43,3 +43,5 @@ include('modules_system:system_exception')
 include('modules_system:system_jwt')
 include('modules_system:system_oauth')
 include('modules_system:system_rest_template')
+include('modules_system:system_post_counter')
+

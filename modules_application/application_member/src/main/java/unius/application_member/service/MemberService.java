@@ -17,9 +17,11 @@ import unius.domain_user.domain.User;
 import unius.domain_user.service.UserService;
 import unius.independent_s3.service.S3Service;
 import unius.schema.bookCounter.BookCounter;
+import unius.schema.postCounter.PostCounter;
 import unius.system_book_counter.component.BookCounterProducer;
 import unius.system_exception.component.DomainValidator;
 import unius.system_exception.exception.WaggleException;
+import unius.system_post_counter.component.PostCounterProducer;
 
 import java.util.List;
 import java.util.Objects;
@@ -45,8 +47,11 @@ public class MemberService {
     private static final String BOOK_DOMAIN = "book";
     private static final String ORDER_ASC = "asc";
     private static final String ORDER_DESC = "desc";
+    private static final String BOOK_COUNTER_TOPIC = "book_counter";
+    private static final String POST_COUNTER_TOPIC = "post_counter";
 
     private final BookCounterProducer bookCounterProducer;
+    private final PostCounterProducer postCounterProducer;
 
     public GetMyUserInfoDto.Response getMyUserInfo(String userId) {
         User user = userValidator.of(userService.get(userId, VERIFIED, INCOMPLETE))
@@ -214,9 +219,9 @@ public class MemberService {
 
         if(isMember && user != null) {
             bookListService.create(user, book);
+            postCounterProducer.sendMessage(POST_COUNTER_TOPIC, new PostCounter(user.getId(), 1L));
         }
-
-        bookCounterProducer.sendMessage("book_counter", new BookCounter(targetBookshelf.getId(), 1L));
+        bookCounterProducer.sendMessage(BOOK_COUNTER_TOPIC, new BookCounter(targetBookshelf.getId(), 1L));
 
         return CreateBookMapper.INSTANCE.toDto(book, targetBookshelf.getId(), bookImageUrl);
     }

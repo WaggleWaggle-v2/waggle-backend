@@ -9,6 +9,7 @@ import unius.core_user.type.UserState;
 import unius.domain_user.domain.User;
 
 import static com.querydsl.core.types.dsl.Expressions.FALSE;
+import static unius.core_user.type.UserState.VERIFIED;
 import static unius.domain_user.domain.QUser.user;
 
 @Repository
@@ -42,6 +43,16 @@ public class UserRepositoryQuerydsl {
 
         jpaQueryFactory.update(user)
                 .set(user.userState, userState)
+                .where(condition)
+                .execute();
+    }
+
+    public void updatePostCounter(String userId, Long additionValue) {
+        BooleanExpression condition = user.id.eq(userId)
+                .and(user.userState.eq(VERIFIED));
+
+        jpaQueryFactory.update(user)
+                .set(user.postCount, user.postCount.add(additionValue))
                 .where(condition)
                 .execute();
     }

@@ -23,6 +23,7 @@ public class UserService {
         User user = User.builder()
                 .id(UuidUtils.generateUuid())
                 .userState(INCOMPLETE)
+                .postCount(0L)
                 .build();
 
         userRepository.save(user);
@@ -38,6 +39,10 @@ public class UserService {
 
     public void setUserState(User user, UserState userState) {
         userRepositoryQuerydsl.setUserState(user, userState);
+    }
+
+    public void updatePostCounter(String userId, Long additionValue) {
+        userRepositoryQuerydsl.updatePostCounter(userId, additionValue);
     }
 
 }

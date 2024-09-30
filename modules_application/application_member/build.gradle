@@ -63,6 +63,7 @@ dependencies {
     implementation project (":modules_independent:independent_s3")
 
     implementation project (":modules_system:system_book_counter")
+    implementation project (":modules_system:system_post_counter")
     implementation project (":modules_system:system_exception")
     implementation project (":modules_system:system_jwt")
     implementation project (":modules_system:system_oauth")

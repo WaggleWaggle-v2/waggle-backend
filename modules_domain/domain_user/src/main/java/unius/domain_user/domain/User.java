@@ -23,4 +23,7 @@ public class User extends AuditingModel {
 
     @Enumerated(EnumType.STRING)
     private UserState userState;
+
+    @Column(nullable = false)
+    private Long postCount;
 }

@@ -12,7 +12,6 @@ public abstract class GetBookshelfBookListDto {
     public static class Response {
         private long id;
         private String nickname;
-        private String description;
         private String bookImageUrl;
         private boolean isOpen;
         private String bookType;

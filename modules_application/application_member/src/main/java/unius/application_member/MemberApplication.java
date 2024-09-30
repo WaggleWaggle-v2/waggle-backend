@@ -16,6 +16,7 @@ import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
         "unius.independent_kafka",
         "unius.independent_s3",
         "unius.system_book_counter",
+        "unius.system_post_counter",
         "unius.system_exception",
         "unius.system_jwt",
         "unius.system_oauth",
