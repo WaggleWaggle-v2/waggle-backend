@@ -7,7 +7,6 @@ import org.springframework.stereotype.Repository;
 import unius.domain_book.domain.Book;
 import unius.domain_book.type.BookState;
 import unius.domain_bookshelf.domain.Bookshelf;
-import unius.domain_user.domain.User;
 
 import java.util.List;
 
@@ -40,22 +39,10 @@ public class BookRepositoryQuerydsl {
                 .fetchOne();
     }
 
-    public List<Book> getBookshelfBookList(User currentUser, Bookshelf currentBookshelf, Long cursorId) {
-        BooleanExpression baseCondition;
+    public List<Book> getBookshelfBookList(Bookshelf currentBookshelf, Long cursorId) {
+        BooleanExpression baseCondition = book.bookshelf.eq(currentBookshelf)
+                .and(book.bookState.eq(ACTIVE));
         BooleanExpression cursorCondition = cursorId == null ? null : book.id.lt(cursorId);
-
-        boolean isMember = (currentUser != null);
-
-        if(!isMember) {
-            baseCondition = book.bookshelf.eq(currentBookshelf)
-                    .and(book.bookState.eq(ACTIVE))
-                    .and(book.isOpen.eq(true));
-        } else {
-            baseCondition = book.bookshelf.eq(currentBookshelf)
-                    .and(book.bookState.eq(ACTIVE))
-                    .and(book.isOpen.eq(true)
-                            .or(book.bookshelf.user.eq(currentUser)));
-        }
 
         BooleanExpression condition = baseCondition.and(cursorCondition);
 

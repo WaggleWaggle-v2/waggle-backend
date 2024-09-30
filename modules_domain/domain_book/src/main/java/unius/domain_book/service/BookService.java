@@ -9,7 +9,6 @@ import unius.domain_book.repository.BookRepositoryQuerydsl;
 import unius.domain_book.type.BookState;
 import unius.domain_book.type.BookType;
 import unius.domain_bookshelf.domain.Bookshelf;
-import unius.domain_user.domain.User;
 
 import java.util.List;
 
@@ -49,8 +48,8 @@ public class BookService {
         return bookRepositoryQuerydsl.getBook(bookId, bookStates);
     }
 
-    public List<Book> getBookshelfBookList(User user, Bookshelf bookshelf, Long cursorId) {
-        return bookRepositoryQuerydsl.getBookshelfBookList(user, bookshelf, cursorId);
+    public List<Book> getBookshelfBookList(Bookshelf bookshelf, Long cursorId) {
+        return bookRepositoryQuerydsl.getBookshelfBookList(bookshelf, cursorId);
     }
 
     public List<Book> getMyReceiveBookList(Bookshelf bookshelf, Long cursorId, String order) {

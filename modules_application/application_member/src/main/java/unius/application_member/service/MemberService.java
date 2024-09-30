@@ -236,17 +236,15 @@ public class MemberService {
     public List<GetBookshelfBookListDto.Response> getBookshelfBookList(String userId, String uuid, Long cursorId) {
         boolean isMember = !(userId == null || userId.isEmpty());
 
-        User user;
         Bookshelf targetBookshelf;
 
         if(!isMember) {
-            user = null;
             targetBookshelf = bookshelfValidator.of(bookshelfService.get(uuid, ACTIVE))
                     .validate(Objects::nonNull, INVALID_BOOKSHELF)
                     .validate(Bookshelf::isOpen, HAVE_NO_PERMISSION)
                     .getOrThrow();
         } else {
-            user = userValidator.of(userService.get(userId, VERIFIED))
+            User user = userValidator.of(userService.get(userId, VERIFIED))
                     .validate(Objects::nonNull, INVALID_USER)
                     .getOrThrow();
 
@@ -256,7 +254,7 @@ public class MemberService {
                     .getOrThrow();
         }
 
-        List<Book> bookList = bookService.getBookshelfBookList(user, targetBookshelf, cursorId);
+        List<Book> bookList = bookService.getBookshelfBookList(targetBookshelf, cursorId);
 
         return GetBookshelfBookListMapper.INSTANCE.toDtoList(bookList);
     }
