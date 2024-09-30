@@ -14,6 +14,7 @@ public abstract class GetBookInfoDto {
     public static class Response {
         private boolean isLock;
         private String description;
+        private String bookImageUrl;
         private LocalDateTime createdAt;
     }
 }

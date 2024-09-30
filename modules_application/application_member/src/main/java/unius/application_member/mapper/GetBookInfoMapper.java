@@ -13,9 +13,11 @@ public interface GetBookInfoMapper {
 
     @Mapping(target = "description", expression = "java(bookList.getBook().getDescription())")
     @Mapping(target = "createdAt", expression = "java(bookList.getBook().getCreatedAt())")
+    @Mapping(target = "bookImageUrl", expression = "java(bookList.getBook().getBookImageUrl())")
     GetBookInfoDto.Response toDto(BookList bookList, boolean isLock);
 
     @Mapping(target = "description", expression = "java(book.getDescription())")
     @Mapping(target = "createdAt", expression = "java(book.getCreatedAt())")
+    @Mapping(target = "bookImageUrl", expression = "java(book.getBookImageUrl())")
     GetBookInfoDto.Response toDto(Book book, boolean isLock);
 }

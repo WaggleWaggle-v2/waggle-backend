@@ -260,9 +260,16 @@ public class MemberService {
     }
 
     public GetBookInfoDto.Response getBookDetail(String userId, Long bookId) {
-        User user = userValidator.of(userService.get(userId, VERIFIED))
-                .validate(Objects::nonNull, INVALID_USER)
-                .getOrThrow();
+        boolean isMember = !(userId == null || userId.isEmpty());
+        User user;
+
+        if(!isMember) {
+            user = null;
+        } else {
+            user = userValidator.of(userService.get(userId, VERIFIED))
+                    .validate(Objects::nonNull, INVALID_USER)
+                    .getOrThrow();
+        }
 
         Book book = bookValidator.of(bookService.getBook(bookId, BookState.ACTIVE))
                 .validate(Objects::nonNull, INVALID_BOOK)
@@ -282,7 +289,7 @@ public class MemberService {
 
         } catch (WaggleException e) {
             if(e.getStatusCode() == 403) {
-                return new GetBookInfoDto.Response(true, null, null);
+                return new GetBookInfoDto.Response(true, null, null, null);
             } else {
                 throw e;
             }
