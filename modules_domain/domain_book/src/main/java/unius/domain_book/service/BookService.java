@@ -48,6 +48,10 @@ public class BookService {
         return bookRepositoryQuerydsl.getBook(bookId, bookStates);
     }
 
+    public void setBookState(Book book, BookState bookState) {
+        bookRepositoryQuerydsl.setBookState(book, bookState);
+    }
+
     public List<Book> getBookshelfBookList(Bookshelf bookshelf, Long cursorId) {
         return bookRepositoryQuerydsl.getBookshelfBookList(bookshelf, cursorId);
     }

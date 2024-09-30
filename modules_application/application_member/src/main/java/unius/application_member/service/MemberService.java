@@ -291,6 +291,42 @@ public class MemberService {
         return GetBookInfoMapper.INSTANCE.toDto(bookList, false);
     }
 
+    @Transactional
+    public void deleteBook(String userId, Long bookId) {
+        User user = userValidator.of(userService.get(userId, VERIFIED))
+                .validate(Objects::nonNull, INVALID_USER)
+                .getOrThrow();
+
+        Book book = bookValidator.of(bookService.getBook(bookId, BookState.ACTIVE))
+                .validate(Objects::nonNull, INVALID_BOOK)
+                .getOrThrow();
+
+        String targetBookshelfId = book.getBookshelf().getId();
+        Bookshelf targetBookshelf = bookshelfValidator.of(bookshelfService.get(targetBookshelfId))
+                .validate(Objects::nonNull, INVALID_BOOKSHELF)
+                .getOrThrow();
+
+        try {
+            bookListValidator.of(bookListService.getBookList(user, book))
+                    .validate(Objects::nonNull, HAVE_NO_PERMISSION)
+                    .execute();
+        } catch (WaggleException e) {
+            // Book은 유효하지만, BookList에는 유효하지 않은 경우 → 비회원이 남긴 경우
+
+            if(e.getStatusCode() == 403) {
+                bookCounterProducer.sendMessage(BOOK_COUNTER_TOPIC, new BookCounter(targetBookshelfId, -1L));
+                bookService.setBookState(book, BookState.WITHDRAW);
+                return;
+            } else {
+                throw e;
+            }
+        }
+
+        bookCounterProducer.sendMessage(BOOK_COUNTER_TOPIC, new BookCounter(targetBookshelfId, -1L));
+        postCounterProducer.sendMessage(POST_COUNTER_TOPIC, new PostCounter(userId, -1L));
+        bookService.setBookState(book, BookState.WITHDRAW);
+    }
+
     public List<GetMySendBookDto.Response> getMySendBookList(String userId, Long cursorId, String order) {
         if(!order.equals(ORDER_ASC) && !order.equals(ORDER_DESC)) {
             throw new WaggleException(MISMATCH_ARGUMENT);

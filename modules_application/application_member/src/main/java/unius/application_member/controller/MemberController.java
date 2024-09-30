@@ -106,6 +106,14 @@ public class MemberController {
         return ResponseEntity.ok(memberService.getBookDetail(id, bookId));
     }
 
+    @DeleteMapping("/book/delete/{bookId}")
+    public ResponseEntity<Void> deleteBook(
+            @RequestHeader("X-User-Id-Header") String id,
+            @PathVariable Long bookId) {
+        memberService.deleteBook(id, bookId);
+        return ResponseEntity.noContent().build();
+    }
+
     @GetMapping("/mybook/send")
     public ResponseEntity<List<GetMySendBookDto.Response>> getMySendBookList(
             @RequestHeader("X-User-Id-Header") String id,

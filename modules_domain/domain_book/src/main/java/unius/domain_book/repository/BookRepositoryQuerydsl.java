@@ -13,6 +13,7 @@ import java.util.List;
 import static com.querydsl.core.types.dsl.Expressions.FALSE;
 import static unius.domain_book.domain.QBook.book;
 import static unius.domain_book.type.BookState.ACTIVE;
+import static unius.domain_book.type.BookState.WITHDRAW;
 
 @Repository
 @RequiredArgsConstructor
@@ -37,6 +38,15 @@ public class BookRepositoryQuerydsl {
         return jpaQueryFactory.selectFrom(book)
                 .where(condition)
                 .fetchOne();
+    }
+
+    public void setBookState(Book currentBook, BookState bookState) {
+        BooleanExpression condition = book.eq(currentBook);
+
+        jpaQueryFactory.update(book)
+                .where(condition)
+                .set(book.bookState, bookState)
+                .execute();
     }
 
     public List<Book> getBookshelfBookList(Bookshelf currentBookshelf, Long cursorId) {

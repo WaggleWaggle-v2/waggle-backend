@@ -4,6 +4,7 @@ import com.querydsl.core.types.dsl.BooleanExpression;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
+import unius.domain_book.domain.Book;
 import unius.domain_book_list.domain.BookList;
 import unius.domain_user.domain.User;
 
@@ -23,6 +24,15 @@ public class BookListRepositoryQuerydsl {
     public BookList getBookList(Long bookId) {
         BooleanExpression condition = bookList.book.id.eq(bookId)
                 .and(bookList.book.bookState.eq(ACTIVE));
+
+        return jpaQueryFactory.selectFrom(bookList)
+                .where(condition)
+                .fetchOne();
+    }
+
+    public BookList getBookList(User user, Book book) {
+        BooleanExpression condition = bookList.user.eq(user)
+                .and(bookList.book.eq(book));
 
         return jpaQueryFactory.selectFrom(bookList)
                 .where(condition)
