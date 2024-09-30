@@ -40,7 +40,8 @@ public class BookListRepositoryQuerydsl {
     }
 
     public List<BookList> getMySendBookList(User currentUser, Long cursorId, String order) {
-        BooleanExpression baseCondition = bookList.user.eq(currentUser);
+        BooleanExpression baseCondition = bookList.user.eq(currentUser)
+                .and(bookList.book.bookState.eq(ACTIVE));
         BooleanExpression cursorCondition;
 
         switch (order.toLowerCase()) {

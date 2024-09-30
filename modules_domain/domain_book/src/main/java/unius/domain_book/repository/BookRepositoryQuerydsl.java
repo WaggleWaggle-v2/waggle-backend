@@ -13,7 +13,6 @@ import java.util.List;
 import static com.querydsl.core.types.dsl.Expressions.FALSE;
 import static unius.domain_book.domain.QBook.book;
 import static unius.domain_book.type.BookState.ACTIVE;
-import static unius.domain_book.type.BookState.WITHDRAW;
 
 @Repository
 @RequiredArgsConstructor
@@ -64,7 +63,8 @@ public class BookRepositoryQuerydsl {
     }
 
     public List<Book> getMyReceiveBookList(Bookshelf currentBookshelf, Long cursorId, String order) {
-        BooleanExpression baseCondition = book.bookshelf.eq(currentBookshelf);
+        BooleanExpression baseCondition = book.bookshelf.eq(currentBookshelf)
+                .and(book.bookState.eq(ACTIVE));
         BooleanExpression cursorCondition;
 
         switch (order.toLowerCase()) {
