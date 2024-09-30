@@ -218,6 +218,10 @@ public class MemberService {
         }
 
         String bookImageUrl = s3Service.uploadFile(bookImage, BOOK_DOMAIN);
+
+        if(isMember && user != null && !request.isOpen()) {
+            throw new WaggleException(MISMATCH_ARGUMENT);
+        }
         Book book = bookService.create(targetBookshelf, request.getNickname(), request.getDescription(), bookImageUrl, request.isOpen(), request.getBookType());
 
         if(isMember && user != null) {
