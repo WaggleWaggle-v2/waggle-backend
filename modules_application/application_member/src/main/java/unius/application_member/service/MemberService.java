@@ -275,8 +275,13 @@ public class MemberService {
                 .validate(Objects::nonNull, INVALID_BOOK)
                 .getOrThrow();
 
+        String targetBookshelfId = book.getBookshelf().getId();
+        Bookshelf targetBookshelf = bookshelfValidator.of(bookshelfService.get(targetBookshelfId))
+                .validate(Objects::nonNull, INVALID_BOOKSHELF)
+                .getOrThrow();
+
         if(book.isOpen()) {
-            return GetBookInfoMapper.INSTANCE.toDto(book, false);
+            return GetBookInfoMapper.INSTANCE.toDto(book, targetBookshelf.getNickname(), false);
         }
 
         BookList bookList;
@@ -289,13 +294,13 @@ public class MemberService {
 
         } catch (WaggleException e) {
             if(e.getStatusCode() == 403) {
-                return new GetBookInfoDto.Response(true, null, null, null);
+                return GetBookInfoDto.Response.lockedResponse();
             } else {
                 throw e;
             }
         }
 
-        return GetBookInfoMapper.INSTANCE.toDto(bookList, false);
+        return GetBookInfoMapper.INSTANCE.toDto(bookList, targetBookshelf.getNickname(), false);
     }
 
     @Transactional
