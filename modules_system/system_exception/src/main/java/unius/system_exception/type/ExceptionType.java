@@ -23,7 +23,7 @@ public enum ExceptionType {
     // 422 UNPROCESSABLE_ENTITY
     INVALID_USER("유효하지 않은 사용자입니다.", 422),
     INVALID_BOOKSHELF("유효하지 않은 책장입니다.", 422),
-    INVALID_BOOK("유요하지 않은 책입니다.", 422),
+    INVALID_BOOK("유효하지 않은 책입니다.", 422),
 
     // 500 INTERNAL_SERVER_ERROR
     DOMAIN_NOT_FOUND("해당 도메인을 찾을 수 없습니다.", 500);
