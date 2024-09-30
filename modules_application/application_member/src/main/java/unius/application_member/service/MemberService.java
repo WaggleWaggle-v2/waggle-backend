@@ -302,9 +302,9 @@ public class MemberService {
                 .getOrThrow();
 
         String targetBookshelfId = book.getBookshelf().getId();
-        Bookshelf targetBookshelf = bookshelfValidator.of(bookshelfService.get(targetBookshelfId))
+        bookshelfValidator.of(bookshelfService.get(targetBookshelfId))
                 .validate(Objects::nonNull, INVALID_BOOKSHELF)
-                .getOrThrow();
+                .execute();
 
         try {
             bookListValidator.of(bookListService.getBookList(user, book))
