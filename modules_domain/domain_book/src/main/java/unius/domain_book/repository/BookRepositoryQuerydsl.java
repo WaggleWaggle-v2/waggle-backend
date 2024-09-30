@@ -5,11 +5,13 @@ import com.querydsl.jpa.impl.JPAQueryFactory;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
 import unius.domain_book.domain.Book;
+import unius.domain_book.type.BookState;
 import unius.domain_bookshelf.domain.Bookshelf;
 import unius.domain_user.domain.User;
 
 import java.util.List;
 
+import static com.querydsl.core.types.dsl.Expressions.FALSE;
 import static unius.domain_book.domain.QBook.book;
 import static unius.domain_book.type.BookState.ACTIVE;
 
@@ -18,6 +20,25 @@ import static unius.domain_book.type.BookState.ACTIVE;
 public class BookRepositoryQuerydsl {
 
     private final JPAQueryFactory jpaQueryFactory;
+
+    public Book getBook(Long bookId, BookState... bookStates) {
+        BooleanExpression condition;
+
+        if(bookStates == null || bookStates.length == 0) {
+            condition = book.id.eq(bookId);
+        } else {
+            condition = FALSE;
+
+            for(BookState bookState : bookStates) {
+                condition = condition.or(book.bookState.eq(bookState));
+            }
+            condition = condition.and(book.id.eq(bookId));
+        }
+
+        return jpaQueryFactory.selectFrom(book)
+                .where(condition)
+                .fetchOne();
+    }
 
     public List<Book> getBookshelfBookList(User currentUser, Bookshelf currentBookshelf, Long cursorId) {
         BooleanExpression baseCondition;

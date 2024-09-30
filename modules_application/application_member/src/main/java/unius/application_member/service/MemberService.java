@@ -8,6 +8,7 @@ import unius.application_member.dto.*;
 import unius.application_member.mapper.*;
 import unius.domain_book.domain.Book;
 import unius.domain_book.service.BookService;
+import unius.domain_book.type.BookState;
 import unius.domain_book_list.domain.BookList;
 import unius.domain_book_list.service.BookListService;
 import unius.domain_bookshelf.domain.Bookshelf;
@@ -37,6 +38,8 @@ public class MemberService {
 
     private final DomainValidator<User> userValidator;
     private final DomainValidator<Bookshelf> bookshelfValidator;
+    private final DomainValidator<Book> bookValidator;
+    private final DomainValidator<BookList> bookListValidator;
 
     private final UserService userService;
     private final BookService bookService;
@@ -252,6 +255,38 @@ public class MemberService {
         List<Book> bookList = bookService.getBookshelfBookList(user, targetBookshelf, cursorId);
 
         return GetBookshelfBookListMapper.INSTANCE.toDtoList(bookList);
+    }
+
+    public GetBookInfoDto.Response getBookDetail(String userId, Long bookId) {
+        User user = userValidator.of(userService.get(userId, VERIFIED))
+                .validate(Objects::nonNull, INVALID_USER)
+                .getOrThrow();
+
+        Book book = bookValidator.of(bookService.getBook(bookId, BookState.ACTIVE))
+                .validate(Objects::nonNull, INVALID_BOOK)
+                .getOrThrow();
+
+        if(book.isOpen()) {
+            return GetBookInfoMapper.INSTANCE.toDto(book, false);
+        }
+
+        BookList bookList;
+
+        try {
+            bookList = bookListValidator.of(bookListService.getBookList(bookId))
+                    .validate(Objects::nonNull, INVALID_BOOK)
+                    .validate(bl -> bl.getBook().isOpen() || bl.getUser().equals(user), HAVE_NO_PERMISSION)
+                    .getOrThrow();
+
+        } catch (WaggleException e) {
+            if(e.getStatusCode() == 403) {
+                return new GetBookInfoDto.Response(true, null, null);
+            } else {
+                throw e;
+            }
+        }
+
+        return GetBookInfoMapper.INSTANCE.toDto(bookList, false);
     }
 
     public List<GetMySendBookDto.Response> getMySendBookList(String userId, Long cursorId, String order) {

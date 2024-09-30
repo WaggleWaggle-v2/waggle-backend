@@ -24,6 +24,10 @@ public class BookListService {
                 .build());
     }
 
+    public BookList getBookList(Long bookId) {
+        return bookListRepositoryQuerydsl.getBookList(bookId);
+    }
+
     public List<BookList> getMySendBookList(User user, Long cursorId, String order) {
         return bookListRepositoryQuerydsl.getMySendBookList(user, cursorId, order);
     }

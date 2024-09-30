@@ -10,6 +10,7 @@ import unius.domain_user.domain.User;
 import java.util.List;
 
 import static unius.domain_book.domain.QBook.book;
+import static unius.domain_book.type.BookState.ACTIVE;
 import static unius.domain_book_list.domain.QBookList.bookList;
 import static unius.domain_user.domain.QUser.user;
 
@@ -18,6 +19,15 @@ import static unius.domain_user.domain.QUser.user;
 public class BookListRepositoryQuerydsl {
 
     private final JPAQueryFactory jpaQueryFactory;
+
+    public BookList getBookList(Long bookId) {
+        BooleanExpression condition = bookList.book.id.eq(bookId)
+                .and(bookList.book.bookState.eq(ACTIVE));
+
+        return jpaQueryFactory.selectFrom(bookList)
+                .where(condition)
+                .fetchOne();
+    }
 
     public List<BookList> getMySendBookList(User currentUser, Long cursorId, String order) {
         BooleanExpression baseCondition = bookList.user.eq(currentUser);

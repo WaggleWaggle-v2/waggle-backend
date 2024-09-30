@@ -6,6 +6,7 @@ import unius.core_enum.util.EnumUtils;
 import unius.domain_book.domain.Book;
 import unius.domain_book.repository.BookRepository;
 import unius.domain_book.repository.BookRepositoryQuerydsl;
+import unius.domain_book.type.BookState;
 import unius.domain_book.type.BookType;
 import unius.domain_bookshelf.domain.Bookshelf;
 import unius.domain_user.domain.User;
@@ -42,6 +43,10 @@ public class BookService {
         bookRepository.saveAndFlush(book);
 
         return book;
+    }
+
+    public Book getBook(Long bookId, BookState ...bookStates) {
+        return bookRepositoryQuerydsl.getBook(bookId, bookStates);
     }
 
     public List<Book> getBookshelfBookList(User user, Bookshelf bookshelf, Long cursorId) {
