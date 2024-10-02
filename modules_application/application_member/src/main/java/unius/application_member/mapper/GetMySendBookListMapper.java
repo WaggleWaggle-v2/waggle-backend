@@ -15,6 +15,7 @@ public interface GetMySendBookListMapper {
     @Mapping(target = "nickname", expression = "java(bookList.getBook().getBookshelf().getNickname())")
     @Mapping(target = "description", expression = "java(bookList.getBook().getDescription())")
     @Mapping(target = "backgroundImageUrl", expression = "java(bookList.getBook().getBookshelf().getBackgroundImageUrl())")
+    @Mapping(target = "bookId", expression = "java(bookList.getBook().getId())")
     GetMySendBookDto.Response toDto(BookList bookList);
 
     List<GetMySendBookDto.Response> toDtoList(List<BookList> bookList);

@@ -122,7 +122,7 @@ public class MemberController {
     }
 
     @GetMapping("/mybook/receive")
-    public ResponseEntity<List<GetMyReceiveBookDto.Response>> getMyResponseBookList(
+    public ResponseEntity<List<GetMyReceiveBookDto.Response>> getMyReceiveBookList(
             @RequestHeader("X-User-Id-Header") String id,
             @RequestParam(required = false) Long cursorId,
             @RequestParam String order) {

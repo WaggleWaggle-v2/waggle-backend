@@ -11,6 +11,7 @@ public abstract class GetMySendBookDto {
     @RequiredArgsConstructor
     public static class Response {
         private long id;
+        private long bookId;
         private String nickname;
         private String description;
         private String backgroundImageUrl;
