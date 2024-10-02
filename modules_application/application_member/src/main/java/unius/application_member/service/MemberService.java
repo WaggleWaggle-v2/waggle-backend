@@ -105,6 +105,27 @@ public class MemberService {
         return new SetUserNicknameDto.Response(nickname);
     }
 
+    public GetSendBookCountDto.Response getSendBookCount(String userId) {
+        User user = userValidator.of(userService.get(userId, VERIFIED))
+                .validate(Objects::nonNull, INVALID_USER)
+                .getOrThrow();
+
+        return GetSendBookCountMapper.INSTANCE.toDto(user);
+    }
+
+    public GetReceiveBookCountDto.Response getReceiveBookCount(String userId) {
+        User user = userValidator.of(userService.get(userId, VERIFIED))
+                .validate(Objects::nonNull, INVALID_USER)
+                .getOrThrow();
+
+        Bookshelf bookshelf = bookshelfValidator.of(bookshelfService.get(userId, ACTIVE))
+                .validate(Objects::nonNull, INVALID_BOOKSHELF)
+                .validate(bs -> bs.getUser().equals(user), HAVE_NO_PERMISSION)
+                .getOrThrow();
+
+        return GetReceiveBookCountMapper.INSTANCE.toDto(bookshelf);
+    }
+
     @Transactional
     public void setBookshelfRevelation(String userId, SetBookshelfRevelationDto.Request request) {
         User user = userValidator.of(userService.get(userId, VERIFIED))

@@ -39,6 +39,18 @@ public class MemberController {
         return ResponseEntity.ok(memberService.setUserNickname(id, request));
     }
 
+    @GetMapping("/info/get/sendBookCount")
+    public ResponseEntity<GetSendBookCountDto.Response> getSendBookCount(
+            @RequestHeader("X-User-Id-Header") String id) {
+        return ResponseEntity.ok(memberService.getSendBookCount(id));
+    }
+
+    @GetMapping("/info/get/receiveBookCount")
+    public ResponseEntity<GetReceiveBookCountDto.Response> getReceiveBookCount(
+            @RequestHeader("X-User-Id-Header") String id) {
+        return ResponseEntity.ok(memberService.getReceiveBookCount(id));
+    }
+
     @PatchMapping("/bookshelf/set/revelation")
     public ResponseEntity<Void> setBookshelfRevelation(
             @RequestHeader("X-User-Id-Header") String id,
