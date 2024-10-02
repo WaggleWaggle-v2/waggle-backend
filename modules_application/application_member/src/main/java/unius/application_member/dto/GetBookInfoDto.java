@@ -20,6 +20,7 @@ public abstract class GetBookInfoDto {
         private String description;
         private String bookImageUrl;
         private LocalDateTime createdAt;
+        private boolean isMine;
 
         public static Response lockedResponse() {
             return Response.builder()

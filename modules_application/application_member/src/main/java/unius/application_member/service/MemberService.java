@@ -247,6 +247,8 @@ public class MemberService {
 
     public GetBookInfoDto.Response getBookDetail(String userId, Long bookId) {
         boolean isMember = !(userId == null || userId.isEmpty());
+        boolean isMine;
+
         User user;
 
         if(!isMember) {
@@ -266,10 +268,6 @@ public class MemberService {
                 .validate(Objects::nonNull, INVALID_BOOKSHELF)
                 .getOrThrow();
 
-        if(book.isOpen()) {
-            return GetBookInfoMapper.INSTANCE.toDto(book, targetBookshelf.getNickname(), false);
-        }
-
         BookList bookList;
 
         try {
@@ -277,6 +275,8 @@ public class MemberService {
                     .validate(Objects::nonNull, INVALID_BOOK)
                     .validate(bl -> bl.getBook().isOpen() || bl.getUser().equals(user), HAVE_NO_PERMISSION)
                     .getOrThrow();
+
+            isMine = bookList.getUser().getId().equals(userId);
 
         } catch (WaggleException e) {
             if(e.getStatusCode() == 403) {
@@ -286,7 +286,7 @@ public class MemberService {
             }
         }
 
-        return GetBookInfoMapper.INSTANCE.toDto(bookList, targetBookshelf.getNickname(), false);
+        return GetBookInfoMapper.INSTANCE.toDto(book, targetBookshelf.getNickname(), isMine, false);
     }
 
     @Transactional
