@@ -73,9 +73,8 @@ public class MemberController {
 
     @GetMapping("/bookshelf/get")
     public ResponseEntity<GetBookshelfInfoDto.Response> getBookshelfInfo(
-            @RequestHeader(value = "X-User-Id-Header", required = false) String id,
             @RequestParam String user) {
-        return ResponseEntity.ok(memberService.getBookshelfInfo(id, user));
+        return ResponseEntity.ok(memberService.getBookshelfInfo(user));
     }
 
     @GetMapping("/bookshelf/get/random")

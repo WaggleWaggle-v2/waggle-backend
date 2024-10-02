@@ -166,24 +166,10 @@ public class MemberService {
         bookshelfService.setIntroduction(bookshelf, request.getIntroduction());
     }
 
-    public GetBookshelfInfoDto.Response getBookshelfInfo(String userId, String uuid) {
-        Bookshelf bookshelf;
-
-        if(userId == null || userId.isEmpty()) {
-            bookshelf = bookshelfValidator.of(bookshelfService.get(uuid, ACTIVE))
+    public GetBookshelfInfoDto.Response getBookshelfInfo(String uuid) {
+        Bookshelf bookshelf = bookshelfValidator.of(bookshelfService.get(uuid, ACTIVE))
                     .validate(Objects::nonNull, INVALID_BOOKSHELF)
-                    .validate(Bookshelf::isOpen, HAVE_NO_PERMISSION)
                     .getOrThrow();
-        } else {
-            userValidator.of(userService.get(userId, VERIFIED))
-                    .validate(Objects::nonNull, INVALID_USER)
-                    .getOrThrow();
-
-            bookshelf = bookshelfValidator.of(bookshelfService.get(uuid, ACTIVE))
-                    .validate(Objects::nonNull, INVALID_BOOKSHELF)
-                    .validate(bs -> bs.isOpen() || bs.getId().equals(userId), HAVE_NO_PERMISSION)
-                    .getOrThrow();
-        }
 
         return GetBookshelfInfoMapper.INSTANCE.toDto(bookshelf);
     }
