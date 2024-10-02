@@ -21,11 +21,12 @@ public class BookListRepositoryQuerydsl {
 
     private final JPAQueryFactory jpaQueryFactory;
 
-    public BookList getBookList(Long bookId) {
-        BooleanExpression condition = bookList.book.id.eq(bookId)
+    public BookList getBookList(Book book) {
+        BooleanExpression condition = bookList.book.eq(book)
                 .and(bookList.book.bookState.eq(ACTIVE));
 
         return jpaQueryFactory.selectFrom(bookList)
+                .join(bookList.user, user).fetchJoin()
                 .where(condition)
                 .fetchOne();
     }

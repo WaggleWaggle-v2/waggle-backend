@@ -251,42 +251,43 @@ public class MemberService {
 
         User user;
 
-        if(!isMember) {
-            user = null;
-        } else {
+        if(isMember) {
             user = userValidator.of(userService.get(userId, VERIFIED))
                     .validate(Objects::nonNull, INVALID_USER)
                     .getOrThrow();
+        } else {
+            user = null;
         }
 
         Book book = bookValidator.of(bookService.getBook(bookId, BookState.ACTIVE))
                 .validate(Objects::nonNull, INVALID_BOOK)
                 .getOrThrow();
 
-        String targetBookshelfId = book.getBookshelf().getId();
-        Bookshelf targetBookshelf = bookshelfValidator.of(bookshelfService.get(targetBookshelfId))
-                .validate(Objects::nonNull, INVALID_BOOKSHELF)
-                .getOrThrow();
-
         BookList bookList;
 
         try {
-            bookList = bookListValidator.of(bookListService.getBookList(bookId))
-                    .validate(Objects::nonNull, INVALID_BOOK)
+            bookList = bookListValidator.of(bookListService.getBookList(book))
+                    .validate(Objects::nonNull, INVALID_BOOK_LIST)
                     .validate(bl -> bl.getBook().isOpen() || bl.getUser().equals(user), HAVE_NO_PERMISSION)
                     .getOrThrow();
 
             isMine = bookList.getUser().getId().equals(userId);
 
+            return GetBookInfoMapper.INSTANCE.toDto(book, book.getBookshelf().getNickname(), isMine, false);
         } catch (WaggleException e) {
-            if(e.getStatusCode() == 403) {
+            if(e.getExceptionType().equals(HAVE_NO_PERMISSION)) {
                 return GetBookInfoDto.Response.lockedResponse();
-            } else {
+            } else if(e.getExceptionType().equals(INVALID_BOOK_LIST)) {
+                if(book.isOpen()) {
+                    return GetBookInfoMapper.INSTANCE.toDto(book, book.getBookshelf().getNickname(), false, false);
+                } else {
+                    return GetBookInfoDto.Response.lockedResponse();
+                }
+            }
+            else {
                 throw e;
             }
         }
-
-        return GetBookInfoMapper.INSTANCE.toDto(book, targetBookshelf.getNickname(), isMine, false);
     }
 
     @Transactional

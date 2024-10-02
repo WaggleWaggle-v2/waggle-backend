@@ -24,8 +24,8 @@ public class BookListService {
                 .build());
     }
 
-    public BookList getBookList(Long bookId) {
-        return bookListRepositoryQuerydsl.getBookList(bookId);
+    public BookList getBookList(Book book) {
+        return bookListRepositoryQuerydsl.getBookList(book);
     }
 
     public BookList getBookList(User user, Book book) {

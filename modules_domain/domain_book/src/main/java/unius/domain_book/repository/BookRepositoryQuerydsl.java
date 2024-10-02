@@ -13,6 +13,8 @@ import java.util.List;
 import static com.querydsl.core.types.dsl.Expressions.FALSE;
 import static unius.domain_book.domain.QBook.book;
 import static unius.domain_book.type.BookState.ACTIVE;
+import static unius.domain_bookshelf.domain.QBookshelf.bookshelf;
+import static unius.domain_user.domain.QUser.user;
 
 @Repository
 @RequiredArgsConstructor
@@ -35,6 +37,8 @@ public class BookRepositoryQuerydsl {
         }
 
         return jpaQueryFactory.selectFrom(book)
+                .join(book.bookshelf, bookshelf).fetchJoin()
+                .join(bookshelf.user, user).fetchJoin()
                 .where(condition)
                 .fetchOne();
     }
