@@ -104,10 +104,9 @@ public class MemberController {
 
     @GetMapping("/book/get")
     public ResponseEntity<List<GetBookshelfBookListDto.Response>> getBookshelfBookList(
-            @RequestHeader(value = "X-User-Id-Header", required = false) String id,
             @RequestParam String uuid,
             @RequestParam(required = false) Long cursorId) {
-        return ResponseEntity.ok(memberService.getBookshelfBookList(id, uuid, cursorId));
+        return ResponseEntity.ok(memberService.getBookshelfBookList(uuid, cursorId));
     }
 
     @GetMapping("/book/get/{bookId}")

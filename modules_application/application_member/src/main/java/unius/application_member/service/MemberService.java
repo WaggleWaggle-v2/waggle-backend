@@ -240,26 +240,10 @@ public class MemberService {
         return CreateBookMapper.INSTANCE.toDto(book, targetBookshelf.getId(), bookImageUrl);
     }
 
-    public List<GetBookshelfBookListDto.Response> getBookshelfBookList(String userId, String uuid, Long cursorId) {
-        boolean isMember = !(userId == null || userId.isEmpty());
-
-        Bookshelf targetBookshelf;
-
-        if(!isMember) {
-            targetBookshelf = bookshelfValidator.of(bookshelfService.get(uuid, ACTIVE))
-                    .validate(Objects::nonNull, INVALID_BOOKSHELF)
-                    .validate(Bookshelf::isOpen, HAVE_NO_PERMISSION)
-                    .getOrThrow();
-        } else {
-            User user = userValidator.of(userService.get(userId, VERIFIED))
-                    .validate(Objects::nonNull, INVALID_USER)
-                    .getOrThrow();
-
-            targetBookshelf = bookshelfValidator.of(bookshelfService.get(uuid, ACTIVE))
-                    .validate(Objects::nonNull, INVALID_BOOKSHELF)
-                    .validate(bs -> bs.getUser().equals(user) || bs.isOpen(), HAVE_NO_PERMISSION)
-                    .getOrThrow();
-        }
+    public List<GetBookshelfBookListDto.Response> getBookshelfBookList(String uuid, Long cursorId) {
+        Bookshelf targetBookshelf = bookshelfValidator.of(bookshelfService.get(uuid, ACTIVE))
+                .validate(Objects::nonNull, INVALID_BOOKSHELF)
+                .getOrThrow();
 
         List<Book> bookList = bookService.getBookshelfBookList(targetBookshelf, cursorId);
 
