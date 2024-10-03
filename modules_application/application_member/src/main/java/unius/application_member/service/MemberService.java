@@ -306,10 +306,12 @@ public class MemberService {
                 .validate(Objects::nonNull, INVALID_BOOKSHELF)
                 .execute();
 
+        BookList bookList;
+
         try {
-            bookListValidator.of(bookListService.getBookList(user, book))
+            bookList = bookListValidator.of(bookListService.getBookList(user, book))
                     .validate(Objects::nonNull, HAVE_NO_PERMISSION)
-                    .execute();
+                    .getOrThrow();
         } catch (WaggleException e) {
             // Book은 유효하지만, BookList에는 유효하지 않은 경우 → 비회원이 남긴 경우
 
@@ -323,7 +325,7 @@ public class MemberService {
         }
 
         bookCounterProducer.sendMessage(BOOK_COUNTER_TOPIC, new BookCounter(targetBookshelfId, -1L));
-        postCounterProducer.sendMessage(POST_COUNTER_TOPIC, new PostCounter(userId, -1L));
+        postCounterProducer.sendMessage(POST_COUNTER_TOPIC, new PostCounter(bookList.getUser().getId(), -1L));
         bookService.setBookState(book, BookState.WITHDRAW);
     }
 
