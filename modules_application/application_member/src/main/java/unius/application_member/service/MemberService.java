@@ -209,20 +209,15 @@ public class MemberService {
 
         if(!isMember) {
             user = null;
-            targetBookshelf = bookshelfValidator.of(bookshelfService.get(request.getBookshelfId(), ACTIVE))
-                    .validate(Objects::nonNull, INVALID_BOOKSHELF)
-                    .validate(Bookshelf::isOpen, HAVE_NO_PERMISSION)
-                    .getOrThrow();
         } else {
             user = userValidator.of(userService.get(userId, VERIFIED))
                     .validate(Objects::nonNull, INVALID_USER)
                     .getOrThrow();
-
-            targetBookshelf = bookshelfValidator.of(bookshelfService.get(request.getBookshelfId(), ACTIVE))
-                    .validate(Objects::nonNull, INVALID_BOOKSHELF)
-                    .validate(bs -> bs.isOpen() || bs.getUser().equals(user), HAVE_NO_PERMISSION)
-                    .getOrThrow();
         }
+
+        targetBookshelf = bookshelfValidator.of(bookshelfService.get(request.getBookshelfId(), ACTIVE))
+                .validate(Objects::nonNull, INVALID_BOOKSHELF)
+                .getOrThrow();
 
         String bookImageUrl = s3Service.uploadFile(bookImage, BOOK_DOMAIN);
 
