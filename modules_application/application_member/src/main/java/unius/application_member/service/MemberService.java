@@ -289,7 +289,8 @@ public class MemberService {
         try {
             bookList = bookListValidator.of(bookListService.getBookList(book))
                     .validate(Objects::nonNull, INVALID_BOOK_LIST)
-                    .validate(bl -> bl.getBook().isOpen() || bl.getUser().equals(user), HAVE_NO_PERMISSION)
+                    .validate(bl ->
+                            bl.getBook().isOpen() || bl.getUser().equals(user) || bl.getBook().getBookshelf().getUser().equals(user), HAVE_NO_PERMISSION)
                     .getOrThrow();
 
             isMine = bookList.getUser().getId().equals(userId);
